@@ -1,111 +1,109 @@
 <script lang="ts">
     import { add_relationship, get_relationships }  from '$lib/query-server';
     import Graph from "$lib/Graph.svelte";
-	import SocialButton from '$lib/SocialButton.svelte';
-    import { fade, scale } from 'svelte/transition';
+    import Modal from "$lib/Modal.svelte";
 	import { onMount } from 'svelte';
-	import type { Relationship } from '$lib/types';
 
+    const username = "alice";
 
-	let visible = false;
+    let code_modal = $state(false);
+    function get_code_modal() {
+        console.log("HEY... WTF")
+        code_modal = true;
+    }
 
-	function handleButtonClick() {
-		visible = true;
-	}
+    let code = "";
+    let error = $state("");
+    let message = $state("");
+    async function find() {
+        const add = await add_relationship(username, code);
+        if (add.error) {
+            switch (add.error) {
+                case "CODE_DOES_NOT_EXIST":
+                    error = "The code you entered does not exist.";
+                    break;
+            }
+        }
+        else message = "Friend added successfully! Reload to see changes";
+    }
 
-	function closePopup() {
-		visible = false;
-	}
+    let { data, form }: {
+       data: { loggedIn: boolean; },
+       form: { error: string } | { success:true }
+    } = $props();
 
-	function handleSocialClick() {
-    alert("Social Button clicked!");
-  	}
-
-    // onMount(() => {
-    // get_relationships("Bob").then((a: any) => {console.log(a)
-    //     add_relationship("Alice", "Bob").then(() => {
-    //         get_relationships("Bob").then((b: any) => {
-    //             console.log(b);
-    //     })
-    // });
-    // })})
 </script>
 
-<Graph cachedPeople={[]} center={"alice"} />
+{#if data.loggedIn}
+<div class="menu">
+<button class="add" onclick={get_code_modal}>
+    &plus;
+</button>
+<form action="?/logout" method="POST">
+    <button class="logout" type="submit">Log Out</button>
+</form>
+</div>
+<Modal visible={code_modal} changeVisible={(val: boolean) => code_modal = val} >
+    <h2>Enter your code</h2>
+    <input type="text" placeholder="Enter your code here" bind:value={code} />
+    <button class="find" onclick={find}>Find Your Friend</button>
+    {#if error}
+    <p class="red">{error}</p>
+    {/if}
+    {#if message}
+    <p class="yellow">{message}</p>
+    {/if}
+</Modal>
 
-{#if visible}
-{console.log('Visible is true')}
-	<div class="overlay" on:click={closePopup} transition:fade>
-		<div class="popup-content" on:click|stopPropagation transition:scale={{ duration: 500 }}>
-			<img src="/your-image.jpg" alt="Popup Image" class="popup-image" />
-			<div class="popup-text">
-				<h2>Popup Title</h2>
-				<p>Popup content goes here.</p>
-			</div>
-			<SocialButton on:click={handleSocialClick} />
-		</div>
-	</div>
+<Graph cachedPeople={[]} center={username} />
+
+<style>
+    .add {
+        aspect-ratio: 1 / 1;;
+    }
+    .logout {
+        padding: 10px 10px;
+    }
+    .find {
+        background-color: orange;
+        padding: 7px 8px;
+        color: white;
+        cursor: pointer;
+    }
+    .menu button {
+        background-color: #1c86ee;
+        color: white;
+        cursor: pointer;
+        width: 100%;
+    }
+    .menu {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        position: absolute;
+        z-index: 1;
+        top: 10px;
+        left: 10px;
+        width: 100px;
+    }
+</style>
+
+{:else}
+
+<form method="POST">
+    <input type="text" name="username" placeholder="Username" required />
+    @<input type="text" name="socials" placeholder="Social Media Handles" />
+    <button type="submit" formaction="?/login">Log In</button>
+    <button type="submit" formaction="?/register">Sign Up</button>
+</form>
+{#if form && 'error' in form}
+    <p class="error">{form.error}</p>
+{/if}
+
 {/if}
 
 <style>
-	.overlay {
-		position: fixed;
-		top: 0;
-		left: 0;
-		width: 100vw;
-		height: 100vh;
-		background-color: rgba(0, 0, 0, 0.5);
-		display: flex;
-		justify-content: center;
-		align-items: center;
-		z-index: 5;
-	}
-
-	.popup-content {
-	display: flex;
-	background: white;
-	padding: 20px;
-	height: 400px;
-	width: 600px;
-	max-width: 90vw;
-	border-radius: 25px;
-	border: 2px solid #000;
-	box-shadow: 0 0 15px rgba(0, 0, 0, 0.4);
-	overflow: hidden;
-	}
-
-	.popup-image {
-		width: 200px;
-		height: 100%;
-		object-fit: cover;
-		border-radius: 20px 0 0 20px;
-	}
-
-	.popup-text {
-		flex: 1;
-		padding-left: 20px;
-		display: flex;
-		flex-direction: column;
-		justify-content: center;
-	}
-
-    :global(body) {
-        margin: 0;
-        background-image: url('/space.webp');
-        background-size: cover;
-        font-family: sans-serif;
-    }
-
-	view-button {
-        height: 100px;
-        width: 100px;
-        background-color: #bbb;
-        border-radius: 90%;
-        display: inline-block;
-        transition: transform 0.3s;
-    }
-    view-button:hover {
-        background-color: #1c86ee;
-        transform: scale(1.3);
+    .error {
+        color: red;
     }
 </style>

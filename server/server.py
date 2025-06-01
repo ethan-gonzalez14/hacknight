@@ -7,9 +7,13 @@ from db import Person, Relationship
 
 # Dummy registry
 people = {
-    "alice": Person("Alice", "@alice07", "1234"),
-    "bob": Person("Bob", "@bobthebob", "5678")
+    "alice": Person("alice", "@alice07", "1234"),
+    "bob": Person("bob", "@bobthebob", "5678"),
+    "cecily": Person("cecily", "@cecilythecutie", "1019")
 }
+
+def gen_random_code():
+    return "10293210"
 
 class SimpleRequestHandler(BaseHTTPRequestHandler):
     def _read_body(self):
@@ -20,28 +24,54 @@ class SimpleRequestHandler(BaseHTTPRequestHandler):
         parsed_path = urlparse(self.path)
         path = parsed_path.path
         query_params = parse_qs(parsed_path.query)
-        print(path)
+        print("POST PATH: " + path)
 
         body = self._read_body().decode('utf-8')
 
         if path == '/add-connection':
-            (name, friend) = body.split(' ')
+            (name, code) = body.split(' ')
 
-            print(name, friend)
+            print(name, code)
 
-            if not name or not friend:
+            if not name or not code:
                 self.respond_json(400, {"error": "Missing name or friend parameter"})
                 return
 
             name = name.strip()
-            friend = friend.strip()
+            code = code.strip()
 
-            add_relationship(Relationship(name.lower(), friend.lower(), 0, "Unknown", "Unknown", False))
+            person = None
+            for p in people.values():
+                if p.friendCode == code:
+                    person = p
+                    break
+            if person == None:
+                self.respond_json(404, {"error": "CODE_DOES_NOT_EXIST"})
+                return
+
+            add_relationship(Relationship(name.lower(), person.name.lower(), 0, "Unknown", "Unknown", False))
 
             self.respond_json(200, {"message": "200 OK"})
             return
+        elif path == '/create-user':
+            parts = body.lower().split(' ')
+            username = parts[0].strip().lower()
+            handle = '' if len(parts) < 2 else parts[1].strip()
 
-        self.respond_json(404, {"error": "Unknown path"})
+            print(username, handle, username in people)
+
+            if not username:
+                self.respond_json(400, {"error": "Missing username"})
+                return
+            if username in people:
+                self.respond_json(400, {"error": "Username already exists"})
+                return
+            new_person = Person(username, f"{handle}", gen_random_code())
+            self.respond_json(200, {"message": "200 OK"})
+            return
+
+        else:
+            self.respond_json(404, {"error": "Unknown path"})
     def do_GET(self):
         parsed_path = urlparse(self.path)
         path = parsed_path.path
@@ -52,8 +82,7 @@ class SimpleRequestHandler(BaseHTTPRequestHandler):
             name = query_params.get("name", [None])[0]
             if name.lower() in people:
                 person = people[name.lower()]
-                # self.respond_json(200, person.jsonify())
-                self.respond_json(200, {})
+                self.respond_json(200, person.jsonify())
                 return
             else:
                 self.respond_json(404, {"error": "Person not found"})
@@ -64,11 +93,25 @@ class SimpleRequestHandler(BaseHTTPRequestHandler):
             if name.lower() in people:
                 rels = get_relationships(name.lower())
 
-                print("about to respond correctly!!!")
                 self.respond_json(200, { "relationships": rels })
                 return
             else:
                 self.respond_json(404, {"error": "Person not found"})
+                return
+        elif path == '/get-user-code':
+            name = query_params.get("name", [None])[0]
+            if name.lower() in people:
+                return self.respond_json(200, {"friendCode": people[name.lower()].friendCode})
+            else:
+                self.respond_json(404, {"error": "Person not found"})
+                return
+        elif path == '/username-found':
+            name = query_params.get("name", [None])[0].lower()
+            if name in people:
+                self.respond_json(200, { "found": True })
+                return
+            else:
+                self.respond_json(200, { "found": False })
                 return
 
         else:

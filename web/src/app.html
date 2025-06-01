@@ -7,13 +7,18 @@
 		%sveltekit.head%
 
 		<style>
+			* {
+				box-sizing: border-box;
+			}
 			body {
 				margin: 0;
-        background-image: url('/space.webp') no-repeat center center fixed;
-        background-size: cover;
-      	font-family: "Trebuchet MS", Helvetica, sans-serif;
-      	line-height: 1.3;
-				
+				background-image: url('/space.webp') no-repeat center center fixed;
+				background-size: cover;
+				font-family: 'Trebuchet MS', Helvetica, sans-serif;
+				line-height: 1.3;
+				display: flex;
+				flex-direction: column;
+				align-items: center;
 			}
 		</style>
 	</head>

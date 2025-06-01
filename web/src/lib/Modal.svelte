@@ -27,13 +27,6 @@
 			{#if children}
 				{@render children()}
 			{/if}
-			<img src="/your-image.jpg" alt="Popup Image" class="popup-image" />
-			<div class="popup-text">
-				<h2>[Insert name]</h2>
-				<p>[Insert public description]</p>
-				<p>[Insert private description]</p>
-				<SocialButton on:click={handleSocialClick} />
-			</div>
 		</div>
 	</div>
 {/if}
