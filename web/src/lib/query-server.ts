@@ -41,7 +41,7 @@ export async function create_user(
 		console.log(result);
 		return result;
 	} catch (error) {
-		return { error };
+		return { error: error as string };
 	}
 }
 
@@ -53,7 +53,7 @@ async function fetch_server(url: string): Promise<any> {
 		}
 		return response.json();
 	} catch (error) {
-		throw error;
+		return { error: error as string };
 	}
 }
 
@@ -68,4 +68,20 @@ export async function get_user_code(person: string): Promise<{ friendCode: strin
 }
 export function username_exists(username: string): Promise<{ found: boolean }> {
 	return fetch_server(server + '/username-found?name=' + encodeURIComponent(username));
+}
+export async function find_user_match(searcher: string, filter: string): Promise<any> {
+	console.log(
+		server +
+			'/search-people?filter=' +
+			encodeURIComponent(filter) +
+			'&searcher=' +
+			encodeURIComponent(searcher)
+	);
+	return fetch_server(
+		server +
+			'/search-people?filter=' +
+			encodeURIComponent(filter) +
+			'&searcher=' +
+			encodeURIComponent(searcher)
+	);
 }

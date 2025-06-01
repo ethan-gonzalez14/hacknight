@@ -77,7 +77,7 @@
 
 
                 let people: Set<string> = new Set();
-                graph.addNode(updatedCenter, { label: updatedCenter, x: half_width, y: half_height, size: 20, color: "orange" });
+                graph.addNode(updatedCenter, { label: updatedCenter, x: half_width, y: half_height, size: 30, color: "orange" });
                 for (let relationship of relationships) {
                     console.log("RELATIONSHIP", relationship)
                     people.add(relationship.person1);
@@ -91,9 +91,9 @@
                     const random_length = random(0.9, 1);
                     console.log(random_length)
 
-                    const x = half_width + half_width * 0.2 * random_length * Math.cos(angle);
-                    const y = half_height + half_height * 0.2 * random_length * Math.sin(angle);
-                    graph.addNode(person, { label: person, x, y, size: 20, color: "lightblue" });
+                    const x = half_width + half_width * 0.1 * random_length * Math.cos(angle);
+                    const y = half_height + half_height * 0.1 * random_length * Math.sin(angle);
+                    graph.addNode(person, { label: person, x, y, size: 30, color: "lightblue" });
                     angle += increment;
                 }
                 for (let relationship of relationships) {

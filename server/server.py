@@ -2,7 +2,7 @@ from http.server import BaseHTTPRequestHandler, HTTPServer
 from urllib.parse import urlparse, parse_qs
 import json
 
-from db import get_relationship, get_all_relationships, add_relationship  # Assuming this function is defined in db module
+from db import get_relationship, get_all_relationships, add_relationship, degrees_of_separation
 from db import Person, Relationship
 
 from http.server import HTTPServer, BaseHTTPRequestHandler
@@ -51,7 +51,7 @@ class SimpleRequestHandler(BaseHTTPRequestHandler):
                     person = p
                     break
             if person == None:
-                self.respond_json(404, {"error": "CODE_DOES_NOT_EXIST"})
+                self.respond_json(200, {"error": "CODE_DOES_NOT_EXIST"})
                 return
 
             add_relationship(Relationship(name.lower(), person.name.lower(), 0, "Unknown", "Unknown", False))
@@ -139,9 +139,24 @@ class SimpleRequestHandler(BaseHTTPRequestHandler):
             else:
                 self.respond_json(200, { "found": False })
                 return
+        elif path == '/search-people':
+            print(query_params)
+            filter = query_params.get("filter", [None])[0].lower()
+            # Username of person who searched, since we want to figure out their degrees of separation
+            searcher = query_params.get("searcher", [None])[0].lower()
+
+            if searcher not in people:
+                self.respond_json(404, { "error": "INVALID_SEARCHER_USERNAME" })
+                return
+
+            for person in people.values():
+                if person.name.lower().startswith(filter) or person.socials.lower().startswith(filter):
+                    self.respond_json(200, {"name": person.name, "socials": person.socials, "degrees": degrees_of_separation(searcher, person.name) })
+                    return
+            self.respond_json(200, { "message": "NO_MATCH" })
 
         else:
-            self.respond_json(404, {"error": "Unknown path"})
+            self.respond_json(404, {"error": "UNKNOWN_PATH"})
             return
 
     def respond_json(self, status_code, content):

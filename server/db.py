@@ -97,7 +97,7 @@ def add_relationship(relationship: Relationship):
     # Assuming person1 and person2 are already set in the relationship
     # setLocationTally(relationship.person1, relationship.person2, relationship.location)
 
-def degrees_of_separation(person1: Person, person2: Person) -> tuple[int, list[Relationship]]:
+def degrees_of_separation(person1: str, person2: str) -> tuple[int, list[Relationship]]:
     """
     Returns the minimum number of relationships between person1 and person2.
     """
@@ -116,8 +116,8 @@ def degrees_of_separation(person1: Person, person2: Person) -> tuple[int, list[R
         
         visited.add(current_person)
         
-        for rel in get_relationships(current_person):
-            next_person = rel.person1 if rel.person2 == current_person else rel.person2
+        for rel in get_all_relationships(current_person):
+            next_person = rel['person1'] if rel['person2'] == current_person else rel['person2']
             if next_person not in visited:
                 queue.append((next_person, degree + 1))
     
