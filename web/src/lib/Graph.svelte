@@ -38,8 +38,8 @@
         onMount(() => {
                 const width = canvas.clientWidth;
                 const height = canvas.clientHeight;
-                const half_width = width / 2 / 2;
-                const half_height = height / 2 / 2;
+                const half_width = width / 2;
+                const half_height = height / 4;
                 console.log("DIMENSIONS", width, height, half_width, half_height)
 
                 graph = new (window as (Window & typeof globalThis & { graphology: any })).graphology.Graph();
@@ -49,7 +49,7 @@
                     people.add(relationship.person1);
                     people.add(relationship.person2);
                 }
-                graph.addNode(center, { label: center, x: half_width, y: half_height, size: 20, color: "orange" });
+                graph.addNode(center, { label: center, x: half_width, y: half_height, size: 20, color: "#f8f6d8" });
                 let angle = 0;
                 let increment = Math.PI * 2 / Math.max(1, people.size - 1);
                 for (let person of people) {
@@ -60,11 +60,11 @@
 
                     const x = half_width + half_width * 0.2 * random_length * Math.cos(angle);
                     const y = half_height + half_height * 0.2 * random_length * Math.sin(angle);
-                    graph.addNode(person, { label: person, x, y, size: 20, color: "lightblue" });
+                    graph.addNode(person, { label: person, x, y, size: 20, color: "#a7a48d" });
                     angle += increment;
                 }
                 for (let relationship of relationships) {
-                    graph.addEdge(relationship.person1, relationship.person2, { size: 1, color: "gray" });
+                    graph.addEdge(relationship.person1, relationship.person2, { size: 5, color: `var(--${relationship.context})` });
                 }
                 
                 const renderer = new (window as any).Sigma(
@@ -89,6 +89,6 @@
     .graph {
         width: 100vw;
         height: 100vw;
-        background-color: #F1F1F1;
+        background-color: black;
     }
 </style>
