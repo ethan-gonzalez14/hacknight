@@ -1,5 +1,5 @@
 <script>
-    import Node from "$lib/Node.svelte";
-</script>
+	import Graph from "$lib/Graph.svelte";
 
-<Node/>
+</script>
+<Graph />

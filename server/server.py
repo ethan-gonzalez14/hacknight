@@ -1,6 +1,8 @@
 from http.server import BaseHTTPRequestHandler, HTTPServer
 from urllib.parse import urlparse, parse_qs
 
+from db import get_user_info  # Assuming this function is defined in db module
+
 class SimpleRequestHandler(BaseHTTPRequestHandler):
     def do_GET(self):
         # Parse the URL path and query parameters
@@ -8,20 +10,9 @@ class SimpleRequestHandler(BaseHTTPRequestHandler):
         path = parsed_path.path
         query_params = parse_qs(parsed_path.query)
 
-        # Only handle requests to "/request"
-        if path == '/get-user-info?username=admin':
+        if path == '/get-user-info':
             # Log the received parameters
             print(f"Received parameters: {query_params}")
-
-            return """"
-            {
-            name: "admin",
-            age: 12,
-            bio: "This is a test user",
-            location: "Test City",
-            interests: ["coding", "testing", "debugging"],
-            }
-            """
 
             # Send response
             self.send_response(200)
@@ -29,6 +20,7 @@ class SimpleRequestHandler(BaseHTTPRequestHandler):
             self.end_headers()
             response = f"Handled /request with parameters: {query_params}"
             self.wfile.write(response.encode('utf-8'))
+            
         else:
             # Handle unknown paths
             self.send_response(404)
