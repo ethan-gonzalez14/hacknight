@@ -5,6 +5,11 @@ import json
 from db import get_relationships, add_relationship  # Assuming this function is defined in db module
 from db import Person, Relationship
 
+from http.server import HTTPServer, BaseHTTPRequestHandler
+from socketserver  import ThreadingMixIn
+import threading
+
+
 # Dummy registry
 people = {
     "alice": Person("alice", "@alice07", "1234"),
@@ -129,13 +134,20 @@ class SimpleRequestHandler(BaseHTTPRequestHandler):
         else:
             self.wfile.write(json.dumps(content).encode())
 
+class ThreadedHTTPServer(ThreadingMixIn, HTTPServer):
+    pass
 
 
 def run(server_class=HTTPServer, handler_class=SimpleRequestHandler, port=8080):
-    server_address = ('', port)
-    httpd = server_class(server_address, handler_class)
-    print(f'Serving on port {port}...')
-    httpd.serve_forever()
+    # server_address = ('', port)
+    # httpd = server_class(server_address, handler_class)
+    # print(f'Serving on port {port}...')
+    # httpd.serve_forever()
+
+    server = ThreadedHTTPServer(('localhost', 8080), SimpleRequestHandler)
+    print('Starting server, use <Ctrl-C> to stop')
+    server.serve_forever()
+
 
 if __name__ == '__main__':
     run()
