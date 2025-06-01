@@ -245,6 +245,7 @@ input {
 }
 </style>
 <div class="container">
+    <img src="/web_logo.webp" alt="Logo" class="top-right-logo" />
     <h1 class="titillium-web-regular fade-in-up">Gain personal <span style="text-decoration: underline;">and</span> professional contacts, all in one place.</h1>
 
     <p class="titillium-web-regular fade-in-up" style="animation-delay: 1s; margin-bottom: 24px;">MyWeb makes it easy to remember who's who. And don't worry about your boss finding out your secret nightlife
