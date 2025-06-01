@@ -1,5 +1,5 @@
 <script>
-    // import Graph from "$lib/Graph.svelte";
+    import Graph from "$lib/Graph.svelte";
     import Node from '$lib/Node.svelte';
 	import SocialButton from '$lib/SocialButton.svelte';
     import { fade, scale } from 'svelte/transition';
@@ -20,7 +20,7 @@
   	}
 </script>
 
-<!-- <Graph /> -->
+<Graph />
 
 <Node onClick={handleButtonClick} />
 
