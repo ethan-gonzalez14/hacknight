@@ -7,6 +7,7 @@
 	import { onMount } from 'svelte';
     import { browser } from '$app/environment';
 	import { random } from "$lib";
+    import '$lib/variables.css';
 
     import type { Person, Relationship } from "$lib/types";
 	import Modal from "./Modal.svelte";
@@ -71,8 +72,16 @@
                     graph.addNode(person, { label: person, x, y, size: 20, color: "#a7a48d" });
                     angle += increment;
                 }
+
+                function getCSSVar(name: string) {
+                    return getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+                }
+
                 for (let relationship of relationships) {
-                    graph.addEdge(relationship.person1, relationship.person2, { size: 5, color: `var(--${relationship.context})` });
+                    graph.addEdge(relationship.person1, relationship.person2, {
+                    size: 5,
+                    color: getCSSVar(`--${relationship.context}`) || '#999'
+                    });
                 }
                 
                 const renderer = new (window as any).Sigma(
@@ -96,9 +105,7 @@
 <style>
     .graph {
         width: 100vw;
-        height: 100vw;
         background-color: black;
         height: 100vh;
-        background-color: #F1F1F1;
     }
 </style>
