@@ -155,9 +155,8 @@
         align-items: center;
     }
     .graph {
-        width: 100vw;
-        background-color: #222222;
-        height: 100vh;
+        width: 90%;
+        height: 95%;
         border: 2px solid #000;
     }
     .bio {
