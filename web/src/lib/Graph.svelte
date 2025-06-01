@@ -11,6 +11,7 @@
     import type { Person, Relationship } from "$lib/types";
 	import Modal from "./Modal.svelte";
     import SocialButton from './SocialButton.svelte';
+    import Input from './Input.svelte';
 	import { get_person, get_relationships, get_user_code } from './query-server';
 
     let { cachedPeople, center }: { cachedPeople: Person[]; center: Person } = $props();
@@ -50,7 +51,9 @@
                 // renderer.getGraph().clear();
                 const renderer = new (window as any).Sigma(
                     graph,
-                    canvas
+                    canvas,
+                    {
+                        defaultNodeLabelColor: "#ff0000"                    }
                 );     
                 renderer.on("clickNode", async (event: any) => {
                     const node = event.node;
@@ -77,7 +80,7 @@
                 console.log(relationships)
 
                 let people: Set<string> = new Set();
-                graph.addNode(updatedCenter, { label: updatedCenter, x: half_width, y: half_height, size: 30, color: "orange" });
+                graph.addNode(updatedCenter, { label: updatedCenter, x: half_width, y: half_height, size: 30, color: "#f8f6d8" });
                 for (let relationship of relationships) {
                     console.log("RELATIONSHIP", relationship)
                     people.add(relationship.person1);
@@ -93,11 +96,11 @@
 
                     const x = half_width + half_width * 0.1 * random_length * Math.cos(angle);
                     const y = half_height + half_height * 0.1 * random_length * Math.sin(angle);
-                    graph.addNode(person, { label: person, x, y, size: 30, color: "lightblue" });
+                    graph.addNode(person, { label: person, x, y, size: 30, color: "#a7a48d" });
                     angle += increment;
                 }
                 for (let relationship of relationships) {
-                    graph.addEdge(relationship.person1, relationship.person2, { size: 5, color: `purple` });
+                    graph.addEdge(relationship.person1, relationship.person2, { size: 10, color: `purple` });
                 }
          
         });
@@ -128,11 +131,16 @@
         <h2>{person.name}</h2>
         <span style="color: gray;">@{person.socials}</span>
         <p><span class="bio">Public Bio: </span>{person.publicBio}</p>
-        <p><span class="bio">Private Bio: </span>{person.privateBio}</p>
+        <p style="margin-bottom: 24px;"><span class="bio">Private Bio: </span>{person.privateBio}</p>
         <SocialButton onClick={() => handleSocialClick(person.name)} />
-
-        {#if person.name == center && getCode()}
-        <p><span>Code: </span>{code}</p>
+        {#if person.name == center}
+        {#if getCode()}
+        <p style="margin-bottom: 24px;"><span>Your Code:</span> {code}</p>
+        {/if}
+        <h2>Change Bio</h2>
+        <Input type="text" name="publicBio" placeholder="Add Public Bio" />
+        <Input type="text" name="privateBio" placeholder="Add Private Bio" />
+        <button type="submit" formaction="?/register">Sign Up</button>
         {/if}
     </div>
 </Modal>
