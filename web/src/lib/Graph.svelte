@@ -140,8 +140,8 @@
 
 <style>
     .graph {
-        width: 90vw;
-        background-color: white;
+        width: 100vw;
+        background-color: #222222;
         height: 100vh;
         border: 2px solid #000;
     }
