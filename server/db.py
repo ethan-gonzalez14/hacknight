@@ -6,6 +6,7 @@ class Person:
         self.public_bio = self.private_bio = ''  # [[public-personal, public-professional], [private-personal, private-professional]]
         self.socials = socials
         self.friendCode = friendCode
+        self.best_friend = None
         self.locations = {} # {'location': 'tally'}
     def __repr__(self):
         return f"Person({self.name}, {self.bios}, {self.socials})"
