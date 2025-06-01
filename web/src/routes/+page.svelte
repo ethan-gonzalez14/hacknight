@@ -134,16 +134,15 @@ input {
 .fade-in-up {
   animation: fadeInUp 0.8s ease-out both;
 }
-
 </style>
 <div class="container">
-    <h1 style="fade-in-up">Gain personal <span style="text-decoration: underline;">and</span> professional contacts, all in one place.</h1>
+    <h1 class="titillium-web-regular fade-in-up">Gain personal <span style="text-decoration: underline;">and</span> professional contacts, all in one place.</h1>
 
-    <p>MyWeb makes it easy to remember who's who. And don't worry about your boss finding out your secret nightlife
+    <p class="titillium-web-regular fade-in-up" style="animation-delay: 1s;">MyWeb makes it easy to remember who's who. And don't worry about your boss finding out your secret nightlife
         drug dealing or having a dance fiesta — control who sees your public and private bios.
     </p>
 
-    <h1>Enough Talk. Get Talking.</h1>
+    <h1 class="wdxl-lubrifont-tc-regular">Enough Talk. Get Talking.</h1>
     <br/>
 
     <div class="login-container">
