@@ -5,27 +5,25 @@ from db import get_user_info  # Assuming this function is defined in db module
 
 class SimpleRequestHandler(BaseHTTPRequestHandler):
     def do_GET(self):
-        # Parse the URL path and query parameters
         parsed_path = urlparse(self.path)
         path = parsed_path.path
         query_params = parse_qs(parsed_path.query)
 
-        if path == '/get-user-info':
-            # Log the received parameters
-            print(f"Received parameters: {query_params}")
+        known_paths = ['/get-user-info', '/get-...']
 
-            # Send response
+        if path in known_paths:
+            print(f"Received request for {path} with parameters: {query_params}")
+
             self.send_response(200)
             self.send_header('Content-type', 'text/plain')
             self.end_headers()
-            response = f"Handled /request with parameters: {query_params}"
+            response = f"Handled {path} with parameters: {query_params}"
             self.wfile.write(response.encode('utf-8'))
-            
         else:
-            # Handle unknown paths
             self.send_response(404)
             self.end_headers()
             self.wfile.write(b'Not Found')
+
 
 def run(server_class=HTTPServer, handler_class=SimpleRequestHandler, port=8080):
     server_address = ('', port)
