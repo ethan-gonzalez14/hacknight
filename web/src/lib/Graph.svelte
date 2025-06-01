@@ -88,9 +88,7 @@
 <style>
     .graph {
         width: 100vw;
-        height: 100vw;
         background-color: black;
         height: 100vh;
-        background-color: #F1F1F1;
     }
 </style>
