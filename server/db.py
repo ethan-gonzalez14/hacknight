@@ -10,6 +10,14 @@ class Relationship:
         self.friends = friends
     def __repr__(self):
         return f"Relationship({self.person1}, {self.person2}, {self.time}, {self.location}, {self.context}, {self.friends})"
+    def jsonify(self, base: str):
+        return f"""{
+            "person": {self.person1 if self.person1 == base else self.person2},
+            "time": {self.time},
+            "location": {self.location},
+            "context": {self.context},
+            "friends": {"true" if self.friends else "false"}
+        }"""
 
 
 def run(query: str):
@@ -58,3 +66,4 @@ def degrees_of_separation(person1: str, person2: str) -> int:
                 queue.append((next_person, degree + 1))
     
     return -1  # If no relationship found
+
