@@ -38,18 +38,25 @@
     
 </script>
 
+<br/><br/>
+
+<div class="input-container">
 <Input type="text" bind:value={search} placeholder="Search for someone..." />
+</div>
 
 <br />
 
 {#if match != null}
 <div class="match">
     <p class="username">{match.username}</p>
-    <p class="count">{match.degrees_of_separation.length == 0 ? "No Connection" : match.degrees_of_separation.length}</p>
+    <p class="count">{match.degrees_of_separation == -1 ? "No Connection" : match.degrees_of_separation}</p>
 </div>
 {/if}
 
 <style>
+    .input-container {
+        width: 80%;
+    }
     .match {
         border: 3px solid #000;
         width: 30%;

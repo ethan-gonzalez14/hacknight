@@ -1,4 +1,4 @@
-const server: string = 'http://localhost:8080';
+const server: string = 'http://10.100.148.175:8080';
 
 export async function add_relationship(person1: string, code: string): Promise<any> {
 	try {

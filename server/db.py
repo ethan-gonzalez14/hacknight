@@ -26,14 +26,6 @@ def setBio(person: Person, bio: str, visibility: int, nature: int): # visibility
 def setSocials(person: Person, socials: str):
     person.socials = socials
 
-def setLocationTally(person1: Person, person2: Person, location: str):
-    if person1.locations.get(location) is None:
-        person1.locations[location] = 0
-    if person2.locations.get(location) is None:
-        person2.locations[location] = 0
-    person1.locations[location] += 1
-    person2.locations[location] += 1
-
 relationships = []
 
 class Relationship:
@@ -71,7 +63,6 @@ def insert_relationship(person1: Person, person2: Person, time: int, location: s
     An optional context about how they met can also be provided.
     """
     relationships.append(Relationship(person1, person2, time, location, context, friends))
-    setLocationTally(person1, person2, location)
 
 def get_all_relationships(person: str) -> list[Relationship]:
     """
@@ -93,11 +84,6 @@ def add_relationship(relationship: Relationship):
     Adds a relationship to the database.
     """
     relationships.append(relationship)
-    # TODO: Set location tally for the relationship
-    # Assuming person1 and person2 are already set in the relationship
-    # setLocationTally(relationship.person1, relationship.person2, relationship.location)
-    if relationship.person1 and relationship.person2:
-        setLocationTally(relationship.person1, relationship.person2, relationship.location)
 
 
 def degrees_of_separation(person1: str, person2: str) -> tuple[int, list[Relationship]]:
@@ -152,7 +138,7 @@ def degrees_of_separation(person1: str, person2: str) -> int:
         visited.add(current_person)
         
         for rel in get_all_relationships(current_person):
-            next_person = rel.person1 if rel.person2 == current_person else rel.person2
+            next_person = rel['person1'] if rel['person2'] == current_person else rel['person2']
             if next_person not in visited:
                 queue.append((next_person, degree + 1))
     

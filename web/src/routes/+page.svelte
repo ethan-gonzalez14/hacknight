@@ -3,6 +3,7 @@
     import Graph from "$lib/Graph.svelte";
     import Modal from "$lib/Modal.svelte";
 	import Input from '$lib/Input.svelte';
+	import { text } from '@sveltejs/kit';
 
     let code_modal = $state(false);
     function get_code_modal() {
@@ -37,6 +38,9 @@
 <button class="add" onclick={get_code_modal}>
     &plus;
 </button>
+<button class="search">
+    <a href="/search" class="material-symbols-outlined">search</a>
+</button>
 <form action="?/logout" method="POST">
     <button class="logout" type="submit">Log Out</button>
 </form>
@@ -67,6 +71,10 @@
         padding: 7px 8px;
         color: white;
         cursor: pointer;
+    }
+    .search > * {
+        vertical-align: middle;
+        text-align: center;
     }
     .menu button {
         background-color: #1c86ee;
