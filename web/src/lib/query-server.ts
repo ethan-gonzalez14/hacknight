@@ -49,46 +49,6 @@ export async function create_user(
 		return { error: error as string };
 	}
 }
-export async function update_private_bio(person: string, personal_bio: string): Promise<any> {
-	try {
-		const response = await fetch(server + '/update-private-bio', {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'text/plain'
-			},
-			body: person + ' ' + personal_bio
-		});
-
-		if (!response.ok) {
-			throw new Error(`HTTP error status: ${response.status}`);
-		}
-
-		const result = await response.json();
-		return result;
-	} catch (error) {
-		throw error;
-	}
-}
-export async function update_public_bio(person: string, public_bio: string): Promise<any> {
-	try {
-		const response = await fetch(server + '/update-public-bio', {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'text/plain'
-			},
-			body: person + ' ' + public_bio
-		});
-
-		if (!response.ok) {
-			throw new Error(`HTTP error status: ${response.status}`);
-		}
-
-		const result = await response.json();
-		return result;
-	} catch (error) {
-		throw error;
-	}
-}
 
 async function fetch_server(url: string): Promise<any> {
 	try {

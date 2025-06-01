@@ -75,7 +75,9 @@
 
 {#if data.loggedIn}
 <div class="menu">
-<img src="/web_logo.webp" alt="Logo" class="top-right-logo" />
+<!-- <button class="add" onclick={get_code_modal}>
+    &plus;
+</button> -->
 <SocialButton onClick={get_code_modal} width="60x" height="60x" fontSize="40px" className="add">
 	&plus;
 </SocialButton>
@@ -194,14 +196,6 @@
     font-size: 30px;
     }
     
-    .top-right-logo {
-	position: fixed;
-	inset-block-start: 1rem;
-	inset-inline-end: 1rem;
-	width: 8rem;
-	height: auto;
-	z-index: 1000;
-}
 </style>
 
 {:else}
