@@ -35,12 +35,12 @@ class SimpleRequestHandler(BaseHTTPRequestHandler):
             print(f"BODY: {body}")
             (name, code, level) = body.split(' ')
 
-            print(name, code)
+            print(name, code, level)
 
             if not name or not code:
                 self.respond_json(400, {"error": "Missing name or friend parameter"})
                 return
-            if level.lower() not in ['friend', 'family', 'work', 'married', 'romantic']:
+            if level.lower() not in ['friends', 'family', 'work', 'married', 'romantic']:
                 self.respond_json(400, {"error": "Invalid level"})
                 return
             if name.lower() not in people:
@@ -97,6 +97,7 @@ class SimpleRequestHandler(BaseHTTPRequestHandler):
             name = query_params.get("name", [None])[0]
             if name.lower() in people:
                 person = people[name.lower()]
+                print(person.jsonify())
                 self.respond_json(200, person.jsonify())
                 return
             else:

@@ -2,7 +2,7 @@
 	export let onClick;
 </script>
 
-<button on:click={onClick} class="social-button">My Graph</button>
+<button on:click={onClick} class="social-button">My Web</button>
 
 <style>
 	.social-button {

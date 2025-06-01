@@ -13,6 +13,7 @@
     import SocialButton from './SocialButton.svelte';
     import Input from './Input.svelte';
 	import { get_person, get_relationships, get_user_code } from './query-server';
+	import { getByPlaceholderText } from '@testing-library/svelte';
 
     let { cachedPeople, center }: { cachedPeople: Person[]; center: Person } = $props();
 
@@ -34,9 +35,7 @@
         modal_showing = true;
     }
 
-    let person: Record<string, any> = $state({
-
-    });
+    let person: Record<string, any> | null = $state(null);
 
     if (browser) {
         onMount(async () => {
@@ -100,26 +99,21 @@
     });
     }
     
-
     function handleSocialClick(name: string) {
-        console.log('Social button clicked');
-        if (updatedCenter != name) {
-            console.log('Social button clicked for:', name);
-            updatedCenter = name;
-        } else {
-            console.log('Social button clicked for center:', center);
-        } 
+        if (updatedCenter != name) updatedCenter = name;
         modal_showing = false;
     }
     let code: string | null = $state(null);
     // Dynamically load the code for the center person when we need it
     async function getCode() {
         if (code == null) code = (await get_user_code(center)).friendCode;
+        return true;
     }
 </script>
 
 <Modal visible={modal_showing} changeVisible={(vis) => modal_showing = vis}>
-    <img src="/your-image.jpg" alt="Popup Image" class="popup-image" />
+{#if person}
+    <!-- <img src="/your-image.jpg" alt="Popup Image" class="popup-image" /> -->
     <div class="popup-text">
         <h2>{person.name}</h2>
 
@@ -130,16 +124,22 @@
         <p><span class="bio">Public Bio: </span>{person.publicBio}</p>
         <p style="margin-bottom: 24px;"><span class="bio">Private Bio: </span>{person.privateBio}</p>
         <SocialButton onClick={() => handleSocialClick(person.name)} />
-        {#if person.name == center}
-        {#if getCode()}
+
+        {#if person.name.toLowerCase() == center.toLowerCase()}
+
+        {#await getCode()}
+        <p>Loading your friend code from our Web Magic...</p>
+        {:then success}
         <p style="margin-bottom: 24px;"><span>Your Code:</span> {code}</p>
-        {/if}
+        {/await}
+
         <h2>Change Bio</h2>
         <Input type="text" name="publicBio" placeholder="Add Public Bio" />
         <Input type="text" name="privateBio" placeholder="Add Private Bio" />
         <button type="submit" formaction="?/register">Sign Up</button>
         {/if}
     </div>
+{/if}
 </Modal>
 
 <div class="graph-container">
@@ -153,11 +153,13 @@
         display: flex;
         justify-content: center;
         align-items: center;
+        background-color: #222222;
     }
     .graph {
         width: 90%;
         height: 95%;
         border: 2px solid #000;
+        touch-action: manipulation;
     }
     .bio {
         font-weight: bold;
