@@ -4,7 +4,7 @@
 </svelte:head>
 
 <script lang="ts">
-    import circular from "graphology-layout/circular";
+    // import circular from "graphology-layout/circular";
 	import { onMount } from 'svelte';
     import { browser } from '$app/environment';
 	import { random } from "$lib";
