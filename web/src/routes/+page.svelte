@@ -85,7 +85,7 @@
 	&plus;
 </SocialButton>
 <SocialButton width="100px" height="10%" type="search" onClick={() => search_modal = true}>
-    <!-- <a href="/search" style="width:100%;height:100%;" class="material-symbols-outlined">search</a> -->
+    <span class="material-symbols-outlined">search</span>
 </SocialButton>
 
 <form action="?/logout" method="POST">
@@ -241,8 +241,8 @@ input {
 <div class="container">
     <h1 class="titillium-web-regular fade-in-up">Gain personal <span style="text-decoration: underline;">and</span> professional contacts, all in one place.</h1>
 
-    <p class="titillium-web-regular fade-in-up" style="animation-delay: 1s; margin-bottom: 24px;">MyWeb makes it easy to remember who's who. And don't worry about your boss finding out your secret nightlife
-        drug dealing or having a dance fiesta — control who sees your public and private bios.
+    <p class="titillium-web-regular fade-in-up" style="animation-delay: 1s; margin-bottom: 24px;">MyWeb maps your authentic connections: visualized as a color-coded web of your relationships. No feeds, no followers - just your life, who you've met, and how your life connects.
+
     </p>
 
     <h1 class="wdxl-lubrifont-tc-regular" style="margin-bottom: 24px;">Enough Talk. Get Talking.</h1>
