@@ -216,7 +216,7 @@
 }
 
 body {
-  background-image: url('/background.png');
+  background-image: url('/background-resized.png');
   color: white;
   font-family: "Titillium Web", sans-serif;
 }
