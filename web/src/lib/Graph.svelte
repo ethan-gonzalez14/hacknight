@@ -50,17 +50,66 @@
                 canvas.innerHTML = '';
                 
                 // TODO: Figure out why this isn't working
+<<<<<<< HEAD
+=======
+                // renderer.getGraph().clear();
+                // const renderer = new (window as any).Sigma(
+                //     graph,
+                //     canvas,
+                //     {
+                //         defaultNodeLabelColor: "#000000"
+                //     }
+                // );    
+                // const renderer = new (window as any).Sigma(
+                // graph,
+                // canvas,
+                // {
+                //     labelColor: {
+                //     color: "attribute",         // Tells Sigma to use the node attribute
+                //     attribute: "labelColor",    // Attribute name you're using
+                //     },
+                //     defaultNodeLabelColor: "#880808",  // Optional fallback
+                //     labelHoverColor: {
+                //     color: "#000000",
+                //     }
+                // }
+                // #d6d0bb
+                // ); 
+                let hoveredNode: string | null = null;
+
+>>>>>>> 776420de553a815e9b3944102212d20b461ab807
                 const renderer = new (window as any).Sigma(
-                graph,
-                canvas,
-                {
-                    labelColor: {
-                    color: "attribute",         // Tells Sigma to use the node attribute
-                    attribute: "labelColor",    // Attribute name you're using
-                    },
-                    defaultNodeLabelColor: "#ffffff"  // Optional fallback
-                }
-                ); 
+                    graph,
+                    canvas,
+                    {
+                        labelColor: {
+                            color: "attribute",
+                            attribute: "labelColor",
+                        },
+                        defaultNodeLabelColor: "#d6d0bb",
+                        nodeReducer: (node, data) => {
+                            if (node === hoveredNode) {
+                                return {
+                                    ...data,
+                                    labelColor: "#000000",  // override label color on hover
+                                };
+                            }
+                            return data;
+                        }
+                    }
+                );
+
+                renderer.on("enterNode", (event: any) => {
+                    hoveredNode = event.node;
+                    renderer.refresh();
+                });
+
+                renderer.on("leaveNode", () => {
+                    hoveredNode = null;
+                    renderer.refresh();
+                });
+
+
                 
                 renderer.on("clickNode", async (event: any) => {
                     const node = event.node;
