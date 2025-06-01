@@ -1,4 +1,8 @@
-export type Person = string;
+export type Person = {
+	name: string;
+	publicBio: string;
+	privateBio: string;
+};
 export type Relationship = {
 	person1: Person;
 	person2: Person;

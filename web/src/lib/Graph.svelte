@@ -118,6 +118,11 @@
         } 
         modal_showing = false;
     }
+
+    function handleSubmit() {
+		console.log(person);
+	}
+    
     let code: string | null = $state(null);
     // Dynamically load the code for the center person when we need it
     async function getCode() {
@@ -130,17 +135,22 @@
     <div class="popup-text">
         <h2>{person.name}</h2>
         <span style="color: gray;">@{person.socials}</span>
-        <p><span class="bio">Public Bio: </span>{person.publicBio}</p>
-        <p style="margin-bottom: 24px;"><span class="bio">Private Bio: </span>{person.privateBio}</p>
-        <SocialButton onClick={() => handleSocialClick(person.name)} />
+        <p><span class="bio">Public Bio:</span> {person.publicBio}</p>
+        <p style="margin-bottom: 24px;"><span class="bio">Private Bio:</span> {person.privateBio}</p>
+        <SocialButton label="{person.name}'s Graph" width="50%" height="20%" onClick={() => handleSocialClick(person.name)} />
         {#if person.name == center}
         {#if getCode()}
         <p style="margin-bottom: 24px;"><span>Your Code:</span> {code}</p>
         {/if}
         <h2>Change Bio</h2>
-        <Input type="text" name="publicBio" placeholder="Add Public Bio" />
-        <Input type="text" name="privateBio" placeholder="Add Private Bio" />
-        <button type="submit" formaction="?/register">Sign Up</button>
+        <!-- <Input type="text" name="publicBio" placeholder="Add Public Bio" />
+        <Input type="text" name="privateBio" placeholder="Add Private Bio" /> -->
+        <form on:submit|preventDefault={handleSubmit}>
+            <Input name="publicBio" bind:value={person.publicBio} placeholder="Add Public Bio" multiline={true} />
+            <Input name="privateBio" bind:value={person.privateBio} placeholder="Add Private Bio" multiline={true} />
+            <SocialButton label="Submit Changes" width="100%" height="10%" type="submit"></SocialButton>
+            <!-- <button type="submit">Save Person</button> -->
+        </form>
         {/if}
     </div>
 </Modal>
@@ -156,4 +166,19 @@
     .bio {
         font-weight: bold;
     }
+    button {
+        background-color: #1c86ee;
+        color: white;
+        cursor: pointer;
+        width: 100%;
+        height: 10vh;
+    }
+
+    span {
+    font-family: "Titillium Web", sans-serif;
+    font-weight: 500;
+    font-style: normal;
+    font-size: 20px;
+    }
+
 </style>
