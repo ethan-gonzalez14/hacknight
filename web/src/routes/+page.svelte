@@ -82,7 +82,7 @@
 	&plus;
 </SocialButton>
 <SocialButton width="100px" height="10%" type="search">
-    <a href="/search" class="material-symbols-outlined">search</a>
+    <a href="/search" style="width:100%;height:100%;" class="material-symbols-outlined">search</a>
 </SocialButton>
 
 <form action="?/logout" method="POST">
