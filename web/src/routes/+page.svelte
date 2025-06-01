@@ -216,7 +216,7 @@
 }
 
 body {
-  background-image: url('/background-resized.png');
+  background-color: #171717;
   color: white;
   font-family: "Titillium Web", sans-serif;
 }
@@ -295,7 +295,7 @@ input {
 		height: 100%;
 		display: flex;
         flex-direction: column;
-		align-items: left;
+		align-items: center;
 	}
 	.error {
 		color: red;
@@ -303,7 +303,7 @@ input {
 	}
 
 	.login-container {
-		width: 25%;
+		width: 40%;
 
 		border-radius: 10px;
 		border: 2px solid lightgrey;
