@@ -7,7 +7,7 @@ from db import Person, Relationship
 
 from http.server import HTTPServer, BaseHTTPRequestHandler
 from socketserver  import ThreadingMixIn
-import threading
+import random
 
 
 # Dummy registry
@@ -18,7 +18,7 @@ people = {
 }
 
 def gen_random_code():
-    return "10293210"
+    return str(random.randint(100_000_000, 999_999_999))
 
 class SimpleRequestHandler(BaseHTTPRequestHandler):
     def _read_body(self):
