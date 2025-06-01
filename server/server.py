@@ -183,7 +183,7 @@ def run(server_class=HTTPServer, handler_class=SimpleRequestHandler, port=8080):
     # print(f'Serving on port {port}...')
     # httpd.serve_forever()
 
-    server = ThreadedHTTPServer(('localhost', 8080), SimpleRequestHandler)
+    server = ThreadedHTTPServer(('0.0.0.0', 8080), SimpleRequestHandler)
     print('Starting server, use <Ctrl-C> to stop')
     server.serve_forever()
 
