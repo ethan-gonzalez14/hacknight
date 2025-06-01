@@ -5,6 +5,7 @@
 	import Input from '$lib/Input.svelte';
 	import { text } from '@sveltejs/kit';
 	import SocialButton from '$lib/SocialButton.svelte';
+	import Search from '$lib/Search.svelte';
 
     let code_modal = $state(false);
     function get_code_modal() {
@@ -71,6 +72,8 @@
        form: { error: string } | { success:true }
     } = $props();
 
+    let search_modal = $state(false);
+
 </script>
 
 {#if data.loggedIn}
@@ -81,8 +84,8 @@
 <SocialButton onClick={get_code_modal} width="60x" height="60x" fontSize="40px" className="add">
 	&plus;
 </SocialButton>
-<SocialButton width="100px" height="10%" type="search">
-    <a href="/search" style="width:100%;height:100%;" class="material-symbols-outlined">search</a>
+<SocialButton width="100px" height="10%" type="search" onClick={() => search_modal = true}>
+    <!-- <a href="/search" style="width:100%;height:100%;" class="material-symbols-outlined">search</a> -->
 </SocialButton>
 
 <form action="?/logout" method="POST">
@@ -96,15 +99,8 @@
     <br/>
 
     <Input type="text" name="friendCode" bind:value={code} placeholder="Enter a friend's code here" multiline={false} />
-
     <br/>
-
     <input placeholder="And your relationship here" list="relationship" name="relationship" class="datalist-input" bind:value={relationship} />
-    <datalist id="relationship">
-    <br/>
-    <Input type="text" name="friendCode" bind:value={code} placeholder="Enter a friend's code here" multiline={false} />
-    <br/>
-    <input placeholder="And your relationship here" list="relationship" name="relationship" bind:value={relationship} />
     <datalist id="relationship" >
         <option value="Friends">Friends 😎</option>
         <option value="Best_Friends">BFFS 😊</option>
@@ -121,7 +117,6 @@
 
     <SocialButton class="find" label="Find Your Friend" onClick={find} width="100%" />
     
-    <SocialButton class="find" label="Find Your Friend" onClick={find} width="100%" height="60px"/>
     <!-- <button class="find" onclick={find}>Find Your Friend</button> -->
     {#if error}
     <p class="red">{error}</p>
@@ -129,6 +124,9 @@
     {#if message}
     <p class="yellow">{message}</p>
     {/if}
+</Modal>
+<Modal visible={search_modal} changeVisible={(val: boolean) => search_modal = val}>
+    <Search data={{ username: data.username }} />
 </Modal>
 
 <Graph cachedPeople={[]} center={data.username} />
