@@ -50,8 +50,6 @@
                 canvas.innerHTML = '';
                 
                 // TODO: Figure out why this isn't working
-<<<<<<< HEAD
-=======
                 // renderer.getGraph().clear();
                 // const renderer = new (window as any).Sigma(
                 //     graph,
@@ -77,7 +75,6 @@
                 // ); 
                 let hoveredNode: string | null = null;
 
->>>>>>> 776420de553a815e9b3944102212d20b461ab807
                 const renderer = new (window as any).Sigma(
                     graph,
                     canvas,
