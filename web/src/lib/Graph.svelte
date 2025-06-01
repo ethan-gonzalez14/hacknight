@@ -15,16 +15,24 @@
 
     const center: Person = "Kiyaan";
     const relationships: Relationship[] = [
-        { person1: "Kiyaan", person2: "Aarav" },
-        { person1: "Kiyaan", person2: "Vivaan" },
-        { person1: "Kiyaan", person2: "Reyansh" },
-        { person1: "Kiyaan", person2: "Anvi" },
-        { person1: "Kiyaan", person2: "Aarvi" },
-        { person1: "Aarvi", person2: "Anvi" },
-        { person1: "Kiyaan", person2: "Aaradhya" },
-        { person1: "Kiyaan", person2: "Saanvi" },
-        { person1: "Saanvi", person2: "Aaradhya" },
-    ];
+    { person1: "Kiyaan", person2: "Aarav", level: 1 },
+    { person1: "Kiyaan", person2: "Vivaan", level: 2 },
+    { person1: "Kiyaan", person2: "Reyansh", level: 3 },
+    { person1: "Kiyaan", person2: "Anvi", level: 4 },
+    { person1: "Kiyaan", person2: "Aarvi", level: 5 },
+    { person1: "Aarvi", person2: "Anvi", level: 2 },
+    { person1: "Kiyaan", person2: "Aaradhya", level: 3 },
+    { person1: "Kiyaan", person2: "Saanvi", level: 1 },
+    { person1: "Saanvi", person2: "Aaradhya", level: 4 },
+];
+
+    const levelColors: Record<number, string> = {
+        1: "red",
+        2: "orange",
+        3: "yellow",
+        4: "blue",
+        5: "violet"
+    };
 
     let canvas: HTMLDivElement;
     let graph: any;
@@ -90,5 +98,7 @@
         width: 100vw;
         height: 100vw;
         background-color: black;
+        height: 100vh;
+        background-color: #F1F1F1;
     }
 </style>

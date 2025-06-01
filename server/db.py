@@ -27,9 +27,12 @@ def setSocials(person: Person, socials: str):
     person.socials = socials
 
 def setLocationTally(person1: Person, person2: Person, location: str):
+    if person1.locations.get(location) is None:
+        person1.locations[location] = 0
+    if person2.locations.get(location) is None:
+        person2.locations[location] = 0
     person1.locations[location] += 1
     person2.locations[location] += 1
-
 
 relationships = []
 
@@ -70,11 +73,21 @@ def insert_relationship(person1: Person, person2: Person, time: int, location: s
     relationships.append(Relationship(person1, person2, time, location, context, friends))
     setLocationTally(person1, person2, location)
 
-def get_relationships(person: Person) -> list[Relationship]:
+def get_relationships(person: str) -> list[Relationship]:
     """
     Returns a list of relationships involving the specified person.
     """
+    print(relationships, person)
     return [rel for rel in relationships if rel.person1 == person or rel.person2 == person]
+
+def add_relationship(relationship: Relationship):
+    """
+    Adds a relationship to the database.
+    """
+    relationships.append(relationship)
+    # TODO: Set location tally for the relationship
+    # Assuming person1 and person2 are already set in the relationship
+    # setLocationTally(relationship.person1, relationship.person2, relationship.location)
 
 def degrees_of_separation(person1: Person, person2: Person) -> tuple[int, list[Relationship]]:
     """
