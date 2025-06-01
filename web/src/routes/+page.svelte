@@ -96,14 +96,53 @@
 
 {:else}
 
-<div class="container">
-    <h1>Gain personal <span style="text-decoration: underline;">and</span> professional contacts, all in one place.</h1>
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Titillium+Web:wght@200;300;400;600;700;900&family=WDXL+Lubrifont+TC&display=swap');
 
-    <p>The Web makes it easy to remember who's who. And don't worry about your boss finding out your secret nightlife
+.wdxl-lubrifont-tc-regular {
+  font-family: "WDXL Lubrifont TC", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.titillium-web-regular {
+  font-family: "Titillium Web", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+body {
+  background-color: #222222;
+  color: #fff;
+}
+
+input {
+    color: black;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-in-up {
+  animation: fadeInUp 0.8s ease-out both;
+}
+</style>
+<div class="container">
+    <h1 class="titillium-web-regular fade-in-up">Gain personal <span style="text-decoration: underline;">and</span> professional contacts, all in one place.</h1>
+
+    <p class="titillium-web-regular fade-in-up" style="animation-delay: 1s; margin-bottom: 24px;">MyWeb makes it easy to remember who's who. And don't worry about your boss finding out your secret nightlife
         drug dealing or having a dance fiesta — control who sees your public and private bios.
     </p>
 
-    <h1>Enough Talk. Get Talking.</h1>
+    <h1 class="wdxl-lubrifont-tc-regular" style="margin-bottom: 24px;">Enough Talk. Get Talking.</h1>
     <br/>
 
     <div class="login-container">
