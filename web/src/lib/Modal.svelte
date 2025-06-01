@@ -1,23 +1,39 @@
 <script lang="ts">
-    import { fade, scale } from 'svelte/transition';
+	import { fade, scale } from 'svelte/transition';
+	import SocialButton from './SocialButton.svelte'; // make sure the path is correct
 
-	let { children, visible, changeVisible }: { children?: any; visible: boolean, changeVisible: (val: boolean) => void } = $props();
+	export let children: any;
+	export let visible: boolean;
+	export let changeVisible: (val: boolean) => void;
 
 	function handleButtonClick() {
 		visible = true;
-        changeVisible(true);
+		changeVisible(true);
 	}
 
 	function closePopup() {
 		visible = false;
-        changeVisible(false);
+		changeVisible(false);
+	}
+
+	function handleSocialClick() {
+		console.log('Social button clicked');
 	}
 </script>
 
 {#if visible}
 	<div class="overlay" on:click={closePopup} transition:fade>
-		<div class="popup-content" on:click|stopPropagation transition:scale="{{ duration: 500 }}">
-			{#if children} {@render children()} {/if}
+		<div class="popup-content" on:click|stopPropagation transition:scale={{ duration: 500 }}>
+			{#if children}
+				{@render children()}
+			{/if}
+			<img src="/your-image.jpg" alt="Popup Image" class="popup-image" />
+			<div class="popup-text">
+				<h2>[Insert name]</h2>
+				<p>[Insert public description]</p>
+				<p>[Insert private description]</p>
+				<SocialButton on:click={handleSocialClick} />
+			</div>
 		</div>
 	</div>
 {/if}
@@ -39,7 +55,7 @@
 	.popup-content {
 		background: white;
 		padding: 20px;
-        height: 400px;
+		height: 400px;
 		width: 600px;
 		max-width: 90vw;
 		border-radius: 25px;
