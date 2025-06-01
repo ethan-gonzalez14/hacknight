@@ -3,6 +3,8 @@
     import Graph from "$lib/Graph.svelte";
     import Modal from "$lib/Modal.svelte";
 	import Input from '$lib/Input.svelte';
+	import { text } from '@sveltejs/kit';
+	import SocialButton from '$lib/SocialButton.svelte';
 
     let code_modal = $state(false);
     function get_code_modal() {
@@ -62,42 +64,41 @@
 
 {#if data.loggedIn}
 <div class="menu">
-<button class="add" onclick={get_code_modal}>
+<!-- <button class="add" onclick={get_code_modal}>
     &plus;
-</button>
-<button class="search">
+</button> -->
+<SocialButton onClick={get_code_modal} width="60x" height="60x" fontSize="40px" className="add">
+	&plus;
+</SocialButton>
+<SocialButton width="100px" height="10%" type="search">
     <a href="/search" class="material-symbols-outlined">search</a>
-</button>
+</SocialButton>
+
 <form action="?/logout" method="POST">
-    <button class="logout" type="submit">Log Out</button>
+    <!-- <button class="logout" type="submit">Log Out</button> -->
+    <SocialButton label="Log Out" width="100px" height="10%" type="submit"></SocialButton>
 </form>
 </div>
 <Modal visible={code_modal} changeVisible={(val: boolean) => code_modal = val} >
-    <div class="modal">
-        <h2>Enter your code</h2>
-        <br />
-        <input type="text" placeholder="Enter your code here" bind:value={code} />
-
-        <br/><br/>
-
-        <input placeholder="And your relationship here" list="relationship" name="relationship" bind:value={relationship} />
-        <datalist id="relationship">
-            <option value="Friends">Friends 😎</option>
-            <option value="Family">Family 🥰</option>
-            <option value="Romantic">Romantic 💋</option>
-            <option value="Married">Married 🤱</option>
-            <option value="Work">Profressional 💼</option>
-        </datalist>
-        <br/> <br/>
-
-        <button class="find" onclick={find}>Find Your Friend</button>
-        {#if error}
-        <p class="red">{error}</p>
-        {/if}
-        {#if message}
-        <p class="yellow">{message}</p>
-        {/if}
-    </div>
+    <h2>Friend Codes</h2>
+    <Input type="text" name="friendCode" bind:value={code} placeholder="Enter a friend's code here" multiline={false} />
+    <input placeholder="And your relationship here" list="relationship" name="relationship" bind:value={relationship} />
+    <datalist id="relationship">
+        <option value="Friends">Friends 😎</option>
+        <option value="Family">Family 🥰</option>
+        <option value="Romantic">Romantic 💋</option>
+        <option value="Married">Married 🤱</option>
+        <option value="Work">Profressional 💼</option>
+    </datalist>
+    <br/> <br/>
+    <SocialButton class="find" label="Find Your Friend" onClick={find} width="140px" height="60px"/>
+    <!-- <button class="find" onclick={find}>Find Your Friend</button> -->
+    {#if error}
+    <p class="red">{error}</p>
+    {/if}
+    {#if message}
+    <p class="yellow">{message}</p>
+    {/if}
 </Modal>
 
 <Graph cachedPeople={[]} center={data.username} />
@@ -146,7 +147,21 @@
         top: 10px;
         left: 10px;
         width: 100px;
+    }   
+
+    .input-button-row {
+	display: flex;
+	gap: 12px;
+	align-items: center;
     }
+
+    h2 {
+    font-family: "Titillium Web", sans-serif;
+    font-weight: 700;
+    font-style: normal;
+    font-size: 30px;
+    }
+    
 </style>
 
 {:else}
@@ -169,6 +184,7 @@
 body {
   background-color: #222222;
   color: #fff;
+  font-family: "Titillium Web", sans-serif;
 }
 
 input {
