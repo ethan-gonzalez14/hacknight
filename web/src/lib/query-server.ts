@@ -1,13 +1,17 @@
 const server: string = 'http://10.100.148.175:8080';
 
-export async function add_relationship(person1: string, code: string): Promise<any> {
+export async function add_relationship(
+	person1: string,
+	code: string,
+	relationship: 'friends' | 'family' | 'married' | 'romantic' | 'work'
+): Promise<any> {
 	try {
 		const response = await fetch(server + '/add-connection', {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'text/plain'
 			},
-			body: person1 + ' ' + code
+			body: person1 + ' ' + code + ' ' + relationship
 		});
 
 		if (!response.ok) {

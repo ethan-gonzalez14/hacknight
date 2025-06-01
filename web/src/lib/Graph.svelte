@@ -17,13 +17,13 @@
 
     let updatedCenter = $state(center);
 
-    // const levelColors: Record<number, string> = {
-    //     1: "red",
-    //     2: "orange",
-    //     3: "yellow",
-    //     4: "blue",
-    //     5: "violet"
-    // };
+    const level_colors: Record<string, string> = {
+        "family": "#db1f54",
+        "friends": "green",
+        "work": "orange",
+        "married": "purple",
+        "romantic": "pink"
+    };
 
     let canvas: HTMLDivElement;
     let graph: any;
@@ -63,23 +63,16 @@
                 });
                 renderer.getGraph().clear();
                 
-                console.log(canvas.childNodes)
-                console.log("UPDATED CENTER", updatedCenter);
-
                 const relationships: Relationship[] = (await get_relationships(updatedCenter)).relationships;
-                console.log(relationships)
 
                 const width = canvas.clientWidth;
                 const height = canvas.clientHeight;
                 const half_width = width / 4;
                 const half_height = height / 4;
-                console.log("DIMENSIONS", width, height, half_width, half_height)
-                console.log(relationships)
 
                 let people: Set<string> = new Set();
                 graph.addNode(updatedCenter, { label: updatedCenter, x: half_width, y: half_height, size: 30, color: "orange" });
                 for (let relationship of relationships) {
-                    console.log("RELATIONSHIP", relationship)
                     people.add(relationship.person1);
                     people.add(relationship.person2);
                 }
@@ -97,7 +90,7 @@
                     angle += increment;
                 }
                 for (let relationship of relationships) {
-                    graph.addEdge(relationship.person1, relationship.person2, { size: 5, color: `purple` });
+                    graph.addEdge(relationship.person1, relationship.person2, { size: 5, color: level_colors[relationship.level] });
                 }
          
         });
@@ -126,7 +119,11 @@
     <img src="/your-image.jpg" alt="Popup Image" class="popup-image" />
     <div class="popup-text">
         <h2>{person.name}</h2>
+
+        {#if person.socials.length > 0}
         <span style="color: gray;">@{person.socials}</span>
+        {/if}
+
         <p><span class="bio">Public Bio: </span>{person.publicBio}</p>
         <p><span class="bio">Private Bio: </span>{person.privateBio}</p>
         <SocialButton onClick={() => handleSocialClick(person.name)} />
