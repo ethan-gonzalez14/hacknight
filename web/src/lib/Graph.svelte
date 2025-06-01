@@ -141,9 +141,19 @@
         {/if}
     </div>
 </Modal>
-<div class="graph" bind:this={canvas}></div>
+
+<div class="graph-container">
+    <div class="graph" bind:this={canvas}></div>
+</div>
 
 <style>
+    .graph-container {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
     .graph {
         width: 100vw;
         background-color: #222222;
