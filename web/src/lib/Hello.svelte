@@ -1,8 +1,7 @@
-<script>
-    let data =  "";
-</script>
+<h1>normal stuff like this</h1>
 
-<input type="text" bind:value={data}>
-<h1>
-    {data}
-</h1>
+<style>
+    h1 {
+        color: green;
+    }
+</style>
