@@ -101,6 +101,11 @@
 
     <input placeholder="And your relationship here" list="relationship" name="relationship" class="datalist-input" bind:value={relationship} />
     <datalist id="relationship">
+    <br/>
+    <Input type="text" name="friendCode" bind:value={code} placeholder="Enter a friend's code here" multiline={false} />
+    <br/>
+    <input placeholder="And your relationship here" list="relationship" name="relationship" bind:value={relationship} />
+    <datalist id="relationship" >
         <option value="Friends">Friends 😎</option>
         <option value="Best_Friends">BFFS 😊</option>
         <option value="Family">Family 🥰</option>
@@ -116,6 +121,8 @@
 
     <SocialButton class="find" label="Find Your Friend" onClick={find} width="100%" />
     
+    <SocialButton class="find" label="Find Your Friend" onClick={find} width="100%" height="60px"/>
+    <!-- <button class="find" onclick={find}>Find Your Friend</button> -->
     {#if error}
     <p class="red">{error}</p>
     {/if}
