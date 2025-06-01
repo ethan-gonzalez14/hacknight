@@ -4,16 +4,20 @@
 </svelte:head>
 
 <script lang="ts">
+<<<<<<< Updated upstream
     // import circular from "graphology-layout/circular";
+=======
+
+    import circular from "graphology-layout/circular";
+>>>>>>> Stashed changes
 	import { onMount } from 'svelte';
     import { browser } from '$app/environment';
 	import { random } from "$lib";
 
-    type Person = string;
-    type Relationship = {
-        person1: Person;
-        person2: Person;
-    };
+    import type { Person, Relationship } from "$lib/types";
+	import Modal from "./Modal.svelte";
+
+    let { cachedPeople }: { cachedPeople: Person[] } = $props();
 
     const center: Person = "Kiyaan";
     const relationships: Relationship[] = [
@@ -30,6 +34,11 @@
 
     let canvas: HTMLDivElement;
     let graph: any;
+    let modal_showing = false;
+
+    function showModal() {
+        modal_showing = true;
+    }
 
     onMount(() => {
         if (browser) {
@@ -71,12 +80,15 @@
             renderer.on("clickNode", (event: any) => {
                 const node = event.node;
                 console.log("Clicked node:", node, graph.getNodeAttributes(node));
+               $: modal_showing = true;
+                showModal();
             });
         }
     });
     
 </script>
 
+<Modal visible={modal_showing}> </Modal>
 <div class="graph" bind:this={canvas}></div>
 
 <style>

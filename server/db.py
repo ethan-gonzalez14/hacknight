@@ -1,18 +1,22 @@
+import json
+
 class Person:
     def __init__(self, name: str, socials: str, friendCode: str):
         self.name = name
-        self.bios = (2, 2)
+        self.bios = [['', ''], ['', '']]  # [[public-personal, public-professional], [private-personal, private-professional]]
         self.socials = socials
         self.friendCode = friendCode
         self.locations = {} # {'location': 'tally'}
     def __repr__(self):
         return f"Person({self.name}, {self.bios}, {self.socials})"
     def jsonify(self):
-        return f"""{
-            "name": {self.name},
-            "bios": {self.bios},
-            "socials": {self.socials}
-        }"""
+        return json.dumps({
+            "name": self.name,
+            "bios": self.bios,
+            "socials": self.socials,
+            "friendCode": self.friendCode,
+            "locations": self.locations
+        })
 
 
 def setBio(person: Person, bio: str, visibility: int, nature: int): # visibility: [public, private]; nature: [personal, professional]
@@ -39,13 +43,14 @@ class Relationship:
     def __repr__(self):
         return f"Relationship({self.person1}, {self.person2}, {self.time}, {self.location}, {self.context}, {self.friends})"
     def jsonify(self, base: str):
-        return f"""{
-            "person": {self.person1 if self.person1 == base else self.person2},
-            "time": {self.time},
-            "location": {self.location},
-            "context": {self.context},
-            "friends": {"true" if self.friends else "false"}
-        }"""
+        return json.dumps({
+            "person": self.person1 if self.person1 == base else self.person2,
+            "time": self.time,
+            "location": self.location,
+            "context": self.context,
+            "friends": self.friends
+        })
+
 
 
 def run(query: str):
