@@ -222,8 +222,8 @@
 }
 
 body {
-  background-color: #222222;
-  color: #fff;
+  background-image: url('/background.png');
+  color: white;
   font-family: "Titillium Web", sans-serif;
 }
 
@@ -275,9 +275,6 @@ input {
             </p>
         </div>
     </div>
-
-    <div id="background"></div>
-    
 </div>
 
 {/if}
@@ -304,28 +301,21 @@ input {
 		height: 100%;
 		display: flex;
         flex-direction: column;
-		align-items: center;
+		align-items: left;
 	}
 	.error {
 		color: red;
 		margin: 0;
 	}
 
-    #background {
-        background-image: url('/background.png');
-        background-size: cover;
-        background-position: center;
-        width: 100vw;
-        height: 100vh;
-    }
-
 	.login-container {
-		width: 40%;
+		width: 25%;
 
 		border-radius: 10px;
 		border: 2px solid lightgrey;
 
 		padding: 5px 10px;
+        background-color: #171717;
 	}
 	.login-container form {
 		width: 100%;
