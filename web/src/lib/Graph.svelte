@@ -14,14 +14,13 @@
 
     let { cachedPeople, center }: { cachedPeople: Person[]; center: Person } = $props();
 
-
-    const levelColors: Record<number, string> = {
-        1: "red",
-        2: "orange",
-        3: "yellow",
-        4: "blue",
-        5: "violet"
-    };
+    // const levelColors: Record<number, string> = {
+    //     1: "red",
+    //     2: "orange",
+    //     3: "yellow",
+    //     4: "blue",
+    //     5: "violet"
+    // };
 
     let canvas: HTMLDivElement;
     let graph: any;
@@ -38,8 +37,8 @@
 
                 const width = canvas.clientWidth;
                 const height = canvas.clientHeight;
-                const half_width = width / 2 / 2;
-                const half_height = height / 2 / 2;
+                const half_width = width / 4;
+                const half_height = height / 4;
                 console.log("DIMENSIONS", width, height, half_width, half_height)
 
                 graph = new (window as (Window & typeof globalThis & { graphology: any })).graphology.Graph();
@@ -65,8 +64,7 @@
                     angle += increment;
                 }
                 for (let relationship of relationships) {
-                    const color = levelColors[relationship.level] || "gray";
-                    graph.addEdge(relationship.person1, relationship.person2, { size: 5, color });
+                    graph.addEdge(relationship.person1, relationship.person2, { size: 5, color: `purple` });
                 }
                 
                 const renderer = new (window as any).Sigma(
@@ -90,6 +88,8 @@
 <style>
     .graph {
         width: 100vw;
+        height: 100vw;
+        background-color: black;
         height: 100vh;
         background-color: #F1F1F1;
     }
