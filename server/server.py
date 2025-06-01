@@ -12,9 +12,9 @@ import random
 
 # Dummy registry
 people = {
-    "alice": Person("alice", "alice07", "1234"),
-    "bob": Person("bob", "bobthebob", "5678"),
-    "cecily": Person("cecily", "cecilythecutie", "1019")
+    # "alice": Person("alice", "alice07", "1234"),
+    # "bob": Person("bob", "bobthebob", "5678"),
+    # "cecily": Person("cecily", "cecilythecutie", "1019")
 }
 
 def gen_random_code():
