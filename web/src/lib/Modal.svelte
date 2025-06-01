@@ -1,14 +1,16 @@
 <script lang="ts">
     import { fade, scale } from 'svelte/transition';
 
-	let { children, visible }: { children?: any; visible: boolean } = $props();
+	let { children, visible, changeVisible }: { children?: any; visible: boolean, changeVisible: (val: boolean) => void } = $props();
 
 	function handleButtonClick() {
 		visible = true;
+        changeVisible(true);
 	}
 
 	function closePopup() {
 		visible = false;
+        changeVisible(false);
 	}
 </script>
 
