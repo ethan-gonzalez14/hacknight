@@ -1,12 +1,10 @@
 <script lang="ts">
-    import { get_relationships }  from '$lib/query-server';
+    import { add_relationship, get_relationships }  from '$lib/query-server';
     import Graph from "$lib/Graph.svelte";
-    import Node from '$lib/Node.svelte';
 	import SocialButton from '$lib/SocialButton.svelte';
     import { fade, scale } from 'svelte/transition';
-	import Modal from '$lib/Modal.svelte';
-	import Component from '$lib/Component.svelte';
 	import { onMount } from 'svelte';
+	import type { Relationship } from '$lib/types';
 
 
 	let visible = false;
@@ -23,11 +21,17 @@
     alert("Social Button clicked!");
   	}
 
-    onMount(() => {
-    get_relationships("Bob").then((a: any) => console.log(a));})
+    // onMount(() => {
+    // get_relationships("Bob").then((a: any) => {console.log(a)
+    //     add_relationship("Alice", "Bob").then(() => {
+    //         get_relationships("Bob").then((b: any) => {
+    //             console.log(b);
+    //     })
+    // });
+    // })})
 </script>
 
-<Graph cachedPeople={[]} />
+<Graph cachedPeople={[]} center={"alice"} />
 
 {#if visible}
 {console.log('Visible is true')}

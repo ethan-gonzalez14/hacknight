@@ -10,21 +10,10 @@
 
     import type { Person, Relationship } from "$lib/types";
 	import Modal from "./Modal.svelte";
+	import { get_relationships } from './query-server';
 
-    let { cachedPeople }: { cachedPeople: Person[] } = $props();
+    let { cachedPeople, center }: { cachedPeople: Person[]; center: Person } = $props();
 
-    const center: Person = "Kiyaan";
-    const relationships: Relationship[] = [
-    { person1: "Kiyaan", person2: "Aarav", level: 1 },
-    { person1: "Kiyaan", person2: "Vivaan", level: 2 },
-    { person1: "Kiyaan", person2: "Reyansh", level: 3 },
-    { person1: "Kiyaan", person2: "Anvi", level: 4 },
-    { person1: "Kiyaan", person2: "Aarvi", level: 5 },
-    { person1: "Aarvi", person2: "Anvi", level: 2 },
-    { person1: "Kiyaan", person2: "Aaradhya", level: 3 },
-    { person1: "Kiyaan", person2: "Saanvi", level: 1 },
-    { person1: "Saanvi", person2: "Aaradhya", level: 4 },
-];
 
     const levelColors: Record<number, string> = {
         1: "red",
@@ -43,7 +32,10 @@
     }
 
     if (browser) {
-        onMount(() => {
+        onMount(async () => {
+                const relationships: Relationship[] = (await get_relationships(center)).relationships;
+                console.log(relationships)
+
                 const width = canvas.clientWidth;
                 const height = canvas.clientHeight;
                 const half_width = width / 2 / 2;
@@ -54,6 +46,7 @@
 
                 let people: Set<string> = new Set();
                 for (let relationship of relationships) {
+                    console.log("RELATIONSHIP", relationship)
                     people.add(relationship.person1);
                     people.add(relationship.person2);
                 }

@@ -64,11 +64,8 @@ class SimpleRequestHandler(BaseHTTPRequestHandler):
             if name.lower() in people:
                 rels = get_relationships(name.lower())
 
-                rel_json = [rel.jsonify(name.lower()) for rel in rels]
-                print(rel_json)
-
                 print("about to respond correctly!!!")
-                self.respond_json(200, { "relationships": rel_json })
+                self.respond_json(200, { "relationships": rels })
                 return
             else:
                 self.respond_json(404, {"error": "Person not found"})
@@ -82,6 +79,7 @@ class SimpleRequestHandler(BaseHTTPRequestHandler):
         self.send_response(status_code)
         self.send_header('Access-Control-Allow-Origin', '*')
         self.send_header('Content-Type', 'application/json')
+        self.send_header('Connection', 'Close')
         self.end_headers()
         if isinstance(content, str):
             self.wfile.write(content.encode())

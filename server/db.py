@@ -46,15 +46,15 @@ class Relationship:
         self.friends = friends
     def __repr__(self):
         return f"Relationship({self.person1}, {self.person2}, {self.time}, {self.location}, {self.context}, {self.friends})"
-    def jsonify(self, base: str):
-        return json.dumps({
-            "person": self.person1 if self.person1 == base else self.person2,
+    def jsonify(self):
+        return {
+            "person1": self.person1,
+            "person2": self.person2,
             "time": self.time,
             "location": self.location,
             "context": self.context,
             "friends": self.friends
-        })
-
+        }
 
 
 def run(query: str):
@@ -78,7 +78,7 @@ def get_relationships(person: str) -> list[Relationship]:
     Returns a list of relationships involving the specified person.
     """
     print(relationships, person)
-    return [rel for rel in relationships if rel.person1 == person or rel.person2 == person]
+    return [rel.jsonify() for rel in relationships if rel.person1 == person or rel.person2 == person]
 
 def add_relationship(relationship: Relationship):
     """

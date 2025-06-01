@@ -22,7 +22,7 @@ export async function add_relationship(person1: string, person2: string): Promis
 }
 export async function get_relationships(person: string): Promise<any> {
 	try {
-		console.log('TRYING FOR ' + server + '/get-relationships?name=' + person);
+		console.log('kh:Asd/' + '/get-relationships?name=' + person);
 		const response = await fetch(server + '/get-relationships?name=' + person);
 
 		if (!response.ok) {
