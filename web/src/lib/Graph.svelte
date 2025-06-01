@@ -4,6 +4,11 @@
 </svelte:head>
 
 <script lang="ts">
+<<<<<<< Updated upstream
+=======
+
+    import circular from "graphology-layout/circular";
+>>>>>>> Stashed changes
 	import { onMount } from 'svelte';
     import { browser } from '$app/environment';
 	import { random } from "$lib";
