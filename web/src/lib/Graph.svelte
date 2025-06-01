@@ -4,16 +4,14 @@
 </svelte:head>
 
 <script lang="ts">
-    // import circular from "graphology-layout/circular";
 	import { onMount } from 'svelte';
     import { browser } from '$app/environment';
 	import { random } from "$lib";
 
-    type Person = string;
-    type Relationship = {
-        person1: Person;
-        person2: Person;
-    };
+    import type { Person, Relationship } from "$lib/types";
+	import Modal from "./Modal.svelte";
+
+    let { cachedPeople }: { cachedPeople: Person[] } = $props();
 
     const center: Person = "Kiyaan";
     const relationships: Relationship[] = [
@@ -30,58 +28,67 @@
 
     let canvas: HTMLDivElement;
     let graph: any;
+    let modal_showing = $state(false);
 
-    onMount(() => {
-        if (browser) {
-            const width = canvas.clientWidth;
-            const height = canvas.clientHeight;
-            const half_width = width / 2 / 2;
-            const half_height = height / 2 / 2;
-            console.log("DIMENSIONS", width, height, half_width, half_height)
+    function showModal() {
+        modal_showing = true;
+    }
 
-            graph = new (window as (Window & typeof globalThis & { graphology: any })).graphology.Graph();
+    if (browser) {
+        onMount(() => {
+                const width = canvas.clientWidth;
+                const height = canvas.clientHeight;
+                const half_width = width / 2 / 2;
+                const half_height = height / 2 / 2;
+                console.log("DIMENSIONS", width, height, half_width, half_height)
 
-            let people: Set<string> = new Set();
-            for (let relationship of relationships) {
-                people.add(relationship.person1);
-                people.add(relationship.person2);
-            }
-            graph.addNode(center, { label: center, x: half_width, y: half_height, size: 20, color: "orange" });
-            let angle = 0;
-            let increment = Math.PI * 2 / Math.max(1, people.size - 1);
-            for (let person of people) {
-                if (person === center) continue; // Skip the center node
+                graph = new (window as (Window & typeof globalThis & { graphology: any })).graphology.Graph();
 
-                const random_length = random(0.9, 1);
-                console.log(random_length)
+                let people: Set<string> = new Set();
+                for (let relationship of relationships) {
+                    people.add(relationship.person1);
+                    people.add(relationship.person2);
+                }
+                graph.addNode(center, { label: center, x: half_width, y: half_height, size: 20, color: "orange" });
+                let angle = 0;
+                let increment = Math.PI * 2 / Math.max(1, people.size - 1);
+                for (let person of people) {
+                    if (person === center) continue; // Skip the center node
 
-                const x = half_width + half_width * 0.2 * random_length * Math.cos(angle);
-                const y = half_height + half_height * 0.2 * random_length * Math.sin(angle);
-                graph.addNode(person, { label: person, x, y, size: 20, color: "lightblue" });
-                angle += increment;
-            }
-            for (let relationship of relationships) {
-                graph.addEdge(relationship.person1, relationship.person2, { size: 1, color: "gray" });
-            }
+                    const random_length = random(0.9, 1);
+                    console.log(random_length)
+
+                    const x = half_width + half_width * 0.2 * random_length * Math.cos(angle);
+                    const y = half_height + half_height * 0.2 * random_length * Math.sin(angle);
+                    graph.addNode(person, { label: person, x, y, size: 20, color: "lightblue" });
+                    angle += increment;
+                }
+                for (let relationship of relationships) {
+                    graph.addEdge(relationship.person1, relationship.person2, { size: 1, color: "gray" });
+                }
+                
+                const renderer = new (window as any).Sigma(
+                    graph,
+                    canvas
+                );
+                renderer.on("clickNode", (event: any) => {
+                    const node = event.node;
+                    console.log("Clicked node:", node, graph.getNodeAttributes(node));
+                    modal_showing = true;
+                });
             
-            const renderer = new (window as any).Sigma(
-                graph,
-                canvas
-            );
-            renderer.on("clickNode", (event: any) => {
-                const node = event.node;
-                console.log("Clicked node:", node, graph.getNodeAttributes(node));
-            });
-        }
-    });
+        });
+    }
     
 </script>
 
+<Modal visible={modal_showing} changeVisible={(vis) => modal_showing = vis}> </Modal>
 <div class="graph" bind:this={canvas}></div>
 
 <style>
     .graph {
-        width: 800px;
-        height: 600px;
+        width: 100vw;
+        height: 100vw;
+        background-color: #F1F1F1;
     }
 </style>

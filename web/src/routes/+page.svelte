@@ -22,8 +22,6 @@
 
 <Graph />
 
-<Node onClick={handleButtonClick} />
-
 {#if visible}
 {console.log('Visible is true')}
 	<div class="overlay" on:click={closePopup} transition:fade>

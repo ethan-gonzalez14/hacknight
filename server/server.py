@@ -12,6 +12,15 @@ people = {
 }
 
 class SimpleRequestHandler(BaseHTTPRequestHandler):
+    def do_POST(self):
+        print(self.path)
+        parsed_path = urlparse(self.path)
+        path = parsed_path.path
+        query_params = parse_qs(parsed_path.query)
+
+        if path == '/add-connection':
+            name = query_params.get("name", [None])[0]
+            print(name)
     def do_GET(self):
         parsed_path = urlparse(self.path)
         path = parsed_path.path
