@@ -8,11 +8,11 @@
 	import { onMount } from 'svelte';
     import { browser } from '$app/environment';
 
-    type Relationship = {
-        person1: string;
-        person2: string;
-    };
     type Person = string;
+    type Relationship = {
+        person1: Person;
+        person2: Person;
+    };
 
     const center: Person = "Kiyaan";
     const relationships: Relationship[] = [
@@ -25,7 +25,6 @@
         { person1: "Kiyaan", person2: "Aaradhya" },
         { person1: "Kiyaan", person2: "Saanvi" },
         { person1: "Saanvi", person2: "Aaradhya" },
-        
     ];
 
     let canvas: HTMLDivElement;
@@ -35,6 +34,9 @@
         if (browser) {
             const width = canvas.clientWidth;
             const height = canvas.clientHeight;
+            const half_width = width / 2;
+            const half_height = height / 2;
+            console.log("DIMENSIONS", width, height)
 
             graph = new (window as (Window & typeof globalThis & { graphology: any })).graphology.Graph();
 
@@ -43,19 +45,42 @@
                 people.add(relationship.person1);
                 people.add(relationship.person2);
             }
+            graph.addNode(center, { label: center, x: half_width, y: half_width, size: 20, color: "orange" });
+            let angle = 0;
+            let increment = Math.PI * 2 / people.size;
             for (let person of people) {
-                graph.addNode(person, { label: person, size: 10, color: "lightblue" });
+                if (person === center) continue; // Skip the center node
+                console.log(half_width + width*0.25*Math.cos(angle),half_height + height*0.25*Math.sin(angle))
+                console.log("Adding person", person, "at angle", angle * 180 / Math.PI);
+                const x = half_width + width*0.25*Math.cos(angle);
+                const y = half_height + height*0.25*Math.sin(angle);
+                graph.addNode(person, { label: person, x, y, size: 10, color: "lightblue" });
+                angle += increment;
             }
             for (let relationship of relationships) {
                 graph.addEdge(relationship.person1, relationship.person2, { size: 1, color: "gray" });
             }
 
-            circular.assign(graph);
+            graph.addNode("TEST", { label: "TEST", x: 100, y: 100, size: 10, color: "red" });
 
-            const sigmaInstance = new Sigma(
+            // circular.assign(graph);
+
+            const renderer = new Sigma(
                 graph,
                 canvas
             );
+            renderer.on("clickNode", (event: any) => {
+                const node = event.node;
+                console.log("Clicked node:", node, graph.getNodeAttributes(node));
+            });
+            // renderer.getCamera().setState({
+            // x: half_width,       // Center the camera on (400, 400)
+            // y: half_height,
+            // ratio: 1,     // No zoom (1 canvas unit = 1 layout unit)
+            // angle: 0,
+            // });
+
+            // renderer.refresh();
         }
     });
     

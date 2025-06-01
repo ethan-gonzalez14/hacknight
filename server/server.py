@@ -1,7 +1,15 @@
 from http.server import BaseHTTPRequestHandler, HTTPServer
 from urllib.parse import urlparse, parse_qs
+import json
 
-from db import get_user_info  # Assuming this function is defined in db module
+from db import get_person  # Assuming this function is defined in db module
+from db import Person, Relationship, relationships
+
+# Dummy registry
+people = {
+    "alice": Person("Alice", "@alice", "1234"),
+    "bob": Person("Bob", "@bob", "5678")
+}
 
 class SimpleRequestHandler(BaseHTTPRequestHandler):
     def do_GET(self):
@@ -9,20 +17,29 @@ class SimpleRequestHandler(BaseHTTPRequestHandler):
         path = parsed_path.path
         query_params = parse_qs(parsed_path.query)
 
-        known_paths = ['/get-user-info', '/get-...']
+        known_paths = ['/get-person', '/get-relationship']
 
         if path in known_paths:
-            print(f"Received request for {path} with parameters: {query_params}")
+            if path == '/get-person':
+                name = query_params.get("name", [None])[0]
+                if name and name.lower() in people:
+                    person = people[name.lower()]
+                    self.respond_json(200, person.jsonify())
+                else:
+                    self.respond_json(404, {"error": "Person not found"})
 
-            self.send_response(200)
-            self.send_header('Content-type', 'text/plain')
-            self.end_headers()
-            response = f"Handled {path} with parameters: {query_params}"
-            self.wfile.write(response.encode('utf-8'))
+            else:
+                self.respond_json(404, {"error": "Unknown path"})
+
+    def respond_json(self, status_code, content):
+        self.send_response(status_code)
+        self.send_header('Content-Type', 'application/json')
+        self.end_headers()
+        if isinstance(content, str):
+            self.wfile.write(content.encode())
         else:
-            self.send_response(404)
-            self.end_headers()
-            self.wfile.write(b'Not Found')
+            self.wfile.write(json.dumps(content).encode())
+
 
 
 def run(server_class=HTTPServer, handler_class=SimpleRequestHandler, port=8080):
