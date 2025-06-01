@@ -40,7 +40,7 @@ class SimpleRequestHandler(BaseHTTPRequestHandler):
             if not name or not code:
                 self.respond_json(400, {"error": "Missing name or friend parameter"})
                 return
-            if level.lower() not in ['friends', 'family', 'work', 'married', 'romantic']:
+            if level.lower() not in ['best_friends', 'friends', 'family', 'work', 'married', 'romantic']:
                 self.respond_json(400, {"error": "Invalid level"})
                 return
             if name.lower() not in people:
@@ -50,20 +50,35 @@ class SimpleRequestHandler(BaseHTTPRequestHandler):
             name = name.strip()
             code = code.strip()
 
-            person = None
+            otherPerson = None
+            user = None
             for p in people.values():
+                if user == None and p.name.lower() == name.lower():
+                    if level == "best_friends" and p.best_friend is not None:
+                        self.respond_json(400, {"error": "USER_ALREADY_HAS_BEST_FRIEND"})
+                        return
+                    user = p
                 if p.friendCode == code:
-                    person = p
+                    otherPerson = p
+                
+                # If we've already found both in order to check for best friendship, we can exit the loop
+                if user != None and otherPerson != None:
                     break
-            if person == None:
+            if otherPerson == None:
                 self.respond_json(200, {"error": "CODE_DOES_NOT_EXIST"})
                 return
             
-            if get_relationship(name.lower(), person.name.lower()) is not None:
+            # Can't have more than one best friend
+            if level == "best_friend":
+                if otherPerson.best_friend != None:
+                    self.respond_json(400, {"error": "OTHER_ALREADY_HAS_BEST_FRIEND"})
+                    return
+            
+            if get_relationship(name.lower(), otherPerson.name.lower()) is not None:
                 self.respond_json(200, {"error": "ALREADY_CONNECTED"})
                 return
 
-            add_relationship(Relationship(name.lower(), person.name.lower(), 0, "Unknown", "Unknown", level.lower()))
+            add_relationship(Relationship(name.lower(), otherPerson.name.lower(), 0, "Unknown", "Unknown", level.lower()))
 
             self.respond_json(200, {"message": "200 OK"})
             return

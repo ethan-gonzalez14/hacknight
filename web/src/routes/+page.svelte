@@ -19,6 +19,7 @@
     async function find() {
         let processed = relationship.toLowerCase();
         switch (processed) {
+            case "best_friends":
             case "friends":
             case "family":
             case "work":
@@ -42,6 +43,12 @@
                     break;
                 case "ALREADY_CONNECTED":
                     error = "You're already friends with this person! See if you can find them in the graph 😉.";
+                    break;
+                case "USER_ALREADY_HAS_BEST_FRIEND":
+                    error = "Sorry, honey, you're taken! You've already got a best friend. Don't let your second-best know, though 😉";
+                    break;
+                case "OTHER_ALREADY_HAS_BEST_FRIEND":
+                    error = "Oof, that's gotta sting! Looks like you're not as special as you thought you were. Maybe try being more interesting next time?";
                     break;
             }
         }
