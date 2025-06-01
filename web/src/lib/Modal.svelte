@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { fade, scale } from 'svelte/transition';
-	import SocialButton from './SocialButton.svelte'; // make sure the path is correct
 
 	export let children: any;
 	export let visible: boolean;
@@ -48,8 +47,9 @@
 	.popup-content {
 		background: white;
 		padding: 20px;
-		height: 400px;
-		width: 600px;
+		height: 600px;
+		width: 1000px;
+		max-height: 90vw;
 		max-width: 90vw;
 		border-radius: 25px;
 		border: 2px solid #000;
