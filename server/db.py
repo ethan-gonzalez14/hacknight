@@ -109,11 +109,11 @@ def degrees_of_separation(person1: str, person2: str) -> tuple[int, list[Relatio
         current_person, degree = queue.pop(0)
         
         if current_person == person2:
-            degree += 1
-            queue.append((current_person, degree))  # Add current person to the queue to collect all people at this degree
-            people = []
-            for item in queue: people.append(item[0])
-            return (degree, people)
+            # degree += 1
+            # queue.append((current_person, degree))  # Add current person to the queue to collect all people at this degree
+            # people = []
+            # for item in queue: people.append(item[0])
+            return (degree, queue)
         
         if current_person in visited:
             continue
@@ -128,3 +128,29 @@ def degrees_of_separation(person1: str, person2: str) -> tuple[int, list[Relatio
                 queue.append((next_person, degree + 1))
     
     return (-1, [])  # If no relationship found
+
+def degrees_of_separation(person1: str, person2: str) -> int:
+    """
+    Returns the minimum number of relationships between person1 and person2.
+    """
+
+    visited = set()
+    queue = [(person1, 0)]  # (current person, current degree)
+    
+    while queue:
+        current_person, degree = queue.pop(0)
+        
+        if current_person == person2:
+            return degree
+        
+        if current_person in visited:
+            continue
+        
+        visited.add(current_person)
+        
+        for rel in get_all_relationships(current_person):
+            next_person = rel.person1 if rel.person2 == current_person else rel.person2
+            if next_person not in visited:
+                queue.append((next_person, degree + 1))
+    
+    return -1  # If no relationship found

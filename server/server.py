@@ -96,11 +96,11 @@ class SimpleRequestHandler(BaseHTTPRequestHandler):
 
         elif path == '/get-relationships':
             name = query_params.get("name", [None])[0].lower()
+            print("NAME", name in people)
             if name in people:
                 rels = get_all_relationships(name.lower())
                 print(rels)
 
-                og_rel_count = len(rels)
                 new_rels = []
 
                 # Add the relationships between the person's friends
@@ -154,7 +154,7 @@ class SimpleRequestHandler(BaseHTTPRequestHandler):
                     degrees = degrees_of_separation(searcher, person.name)
                     print("DEGREES")
                     print(degrees)
-                    self.respond_json(200, {"name": person.name, "socials": person.socials, "degrees": degrees[1] })
+                    self.respond_json(200, {"name": person.name, "socials": person.socials, "degrees": degrees })
                     return
             self.respond_json(200, { "message": "NO_MATCH" })
 

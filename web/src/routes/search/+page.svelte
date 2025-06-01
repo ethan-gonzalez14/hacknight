@@ -40,18 +40,34 @@
 
 <Input type="text" bind:value={search} placeholder="Search for someone..." />
 
+<br />
+
 {#if match != null}
 <div class="match">
-    <p>{match.username}</p>
-    <p>{match.degrees_of_separation.length == 0 ? "No Connection" : match.degrees_of_separation.length}</p>
-    <p>{match.degrees_of_separation.join(" -> ")}</p>
+    <p class="username">{match.username}</p>
+    <p class="count">{match.degrees_of_separation.length == 0 ? "No Connection" : match.degrees_of_separation.length}</p>
 </div>
 {/if}
 
 <style>
     .match {
         border: 3px solid #000;
-        width: 50%;
+        width: 30%;
         min-height: 45px;
+    }
+    .match p {
+        vertical-align: middle;
+    }
+    .username {
+        font-size: 1.5rem;
+        display: float;
+        float: left;
+        margin-left: 15px;
+    }
+    .count {
+        font-size: 1rem;
+        display: float;
+        float: right;
+        margin-right: 15px;
     }
 </style>

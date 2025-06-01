@@ -74,7 +74,7 @@
                 const half_width = width / 4;
                 const half_height = height / 4;
                 console.log("DIMENSIONS", width, height, half_width, half_height)
-
+                console.log(relationships)
 
                 let people: Set<string> = new Set();
                 graph.addNode(updatedCenter, { label: updatedCenter, x: half_width, y: half_height, size: 30, color: "orange" });
