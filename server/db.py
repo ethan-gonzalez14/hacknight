@@ -13,8 +13,8 @@ class Person:
     def jsonify(self):
         return json.dumps({
             "name": self.name,
-            "personalBio": self.public_bio,
-            "professionalBio": self.private_bio,
+            "privateBio": self.public_bio,
+            "publicBio": self.private_bio,
             "socials": self.socials,
             "friendCode": self.friendCode,
             "locations": self.locations

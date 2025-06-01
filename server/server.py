@@ -100,6 +100,38 @@ class SimpleRequestHandler(BaseHTTPRequestHandler):
             people[username] = new_person
             self.respond_json(200, {"message": "200 OK"})
             return
+        elif path == '/update-private-bio':
+            parts = body.split(' ')
+            username = parts[0].strip().lower()
+            bio = ' '.join(parts[1:]).strip()
+
+            if not username:
+                self.respond_json(400, {"error": "USERNAME_NOT_GIVEN"})
+                return
+            if username not in people:
+                self.respond_json(404, {"error": "INVALID_USERNAME_GIVEN"})
+                return
+
+            people[username].private_bio = bio
+            self.respond_json(200, {"message": "200 OK"})
+            return
+        elif path == '/update-public-bio':
+            parts = body.split(' ')
+            username = parts[0].strip().lower()
+            bio = ' '.join(parts[1:]).strip()
+
+            print("Updating that public biography: ", username, bio)
+
+            if not username:
+                self.respond_json(400, {"error": "USERNAME_NOT_GIVEN"})
+                return
+            if username not in people:
+                self.respond_json(404, {"error": "INVALID_USERNAME_GIVEN"})
+                return
+
+            people[username].public_bio = bio
+            self.respond_json(200, {"message": "200 OK"})
+            return
 
         else:
             self.respond_json(404, {"error": "Unknown path"})
@@ -107,7 +139,6 @@ class SimpleRequestHandler(BaseHTTPRequestHandler):
         parsed_path = urlparse(self.path)
         path = parsed_path.path
         query_params = parse_qs(parsed_path.query)
-
 
         if path == '/get-person':
             name = query_params.get("name", [None])[0]

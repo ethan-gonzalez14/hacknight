@@ -12,7 +12,7 @@
 	import Modal from "./Modal.svelte";
     import SocialButton from './SocialButton.svelte';
     import Input from './Input.svelte';
-	import { get_person, get_relationships, get_user_code } from './query-server';
+	import { get_person, get_relationships, get_user_code, update_private_bio, update_public_bio } from './query-server';
 	import { getByPlaceholderText } from '@testing-library/svelte';
 
     let { cachedPeople, center }: { cachedPeople: Person[]; center: Person } = $props();
@@ -50,14 +50,6 @@
                 canvas.innerHTML = '';
                 
                 // TODO: Figure out why this isn't working
-                // renderer.getGraph().clear();
-                // const renderer = new (window as any).Sigma(
-                //     graph,
-                //     canvas,
-                //     {
-                //         defaultNodeLabelColor: "#000000"
-                //     }
-                // );    
                 const renderer = new (window as any).Sigma(
                 graph,
                 canvas,
@@ -141,6 +133,11 @@
         modal_showing = false;
     }
 
+    function submitBioChanges() {
+        update_private_bio(center, person.publicBio);
+        update_public_bio(center, person.privateBio);
+    }
+
     function handleSubmit() {
 		console.log(person);
 	}
@@ -184,11 +181,17 @@
         <form on:submit|preventDefault={handleSubmit}>
             <Input name="publicBio" bind:value={person.publicBio} placeholder="Add Public Bio" multiline={true} />
             <Input name="privateBio" bind:value={person.privateBio} placeholder="Add Private Bio" multiline={true} />
-            <SocialButton label="Submit Changes" width="100%" height="10%" type="submit"></SocialButton>
+            <SocialButton label="Submit Changes" width="100%" height="10%" type="submit" onClick={submitBioChanges} />
             <!-- <button type="submit">Save Person</button> -->
         </form>
         {:else if highlighted_relationship}
-            <h3>{highlighted_relationship.context}</h3>
+            <h3>Remember when you two met? You do now: &ldquo;{highlighted_relationship.context}&rdquo;</h3>
+
+            <br/>
+            <p><b>Public Bio:</b> {person.public_bio}</p>
+            {#if highlighted_relationship.level != 'work'}
+            <p><b>Private Bio:</b> {person.private_bio}</p>
+            {/if}
         {/if}
     </div>
 {/if}
