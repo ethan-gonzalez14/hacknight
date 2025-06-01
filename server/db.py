@@ -73,12 +73,20 @@ def insert_relationship(person1: Person, person2: Person, time: int, location: s
     relationships.append(Relationship(person1, person2, time, location, context, friends))
     setLocationTally(person1, person2, location)
 
-def get_relationships(person: str) -> list[Relationship]:
+def get_all_relationships(person: str) -> list[Relationship]:
     """
     Returns a list of relationships involving the specified person.
     """
     print(relationships, person)
     return [rel.jsonify() for rel in relationships if rel.person1 == person or rel.person2 == person]
+def get_relationship(person1: str, person2: str) -> Relationship | None:
+    """
+    Returns the relationship between person1 and person2 if it exists, otherwise returns None.
+    """
+    for rel in relationships:
+        if (rel.person1 == person1 and rel.person2 == person2) or (rel.person1 == person2 and rel.person2 == person1):
+            return rel.jsonify()
+    return None
 
 def add_relationship(relationship: Relationship):
     """

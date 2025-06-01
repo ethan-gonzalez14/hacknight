@@ -2,7 +2,7 @@ from http.server import BaseHTTPRequestHandler, HTTPServer
 from urllib.parse import urlparse, parse_qs
 import json
 
-from db import get_relationships, add_relationship  # Assuming this function is defined in db module
+from db import get_relationship, get_all_relationships, add_relationship  # Assuming this function is defined in db module
 from db import Person, Relationship
 
 from http.server import HTTPServer, BaseHTTPRequestHandler
@@ -12,9 +12,9 @@ import threading
 
 # Dummy registry
 people = {
-    "alice": Person("alice", "@alice07", "1234"),
-    "bob": Person("bob", "@bobthebob", "5678"),
-    "cecily": Person("cecily", "@cecilythecutie", "1019")
+    "alice": Person("alice", "alice07", "1234"),
+    "bob": Person("bob", "bobthebob", "5678"),
+    "cecily": Person("cecily", "cecilythecutie", "1019")
 }
 
 def gen_random_code():
@@ -95,10 +95,30 @@ class SimpleRequestHandler(BaseHTTPRequestHandler):
                 return
 
         elif path == '/get-relationships':
-            name = query_params.get("name", [None])[0]
-            if name.lower() in people:
-                rels = get_relationships(name.lower())
+            name = query_params.get("name", [None])[0].lower()
+            if name in people:
+                rels = get_all_relationships(name.lower())
+                print(rels)
 
+                og_rel_count = len(rels)
+                new_rels = []
+
+                # Add the relationships between the person's friends
+                for x in range(len(rels)):
+                    for y in range(x + 1, len(rels)):
+                        if x == y: continue
+                        print(x, y, rels[x], rels[y])
+                        person1 = rels[x]['person1'] if rels[x]['person1'] != name else rels[x]['person2']
+                        person2 = rels[y]['person1'] if rels[y]['person1'] != name else rels[y]['person2']
+
+                        relationship = get_relationship(person1, person2)
+                        if relationship is not None:
+                            new_rels.append(relationship)
+
+                for rel in new_rels:
+                    rels.append(rel)
+
+                print(rels)
                 self.respond_json(200, { "relationships": rels })
                 return
             else:

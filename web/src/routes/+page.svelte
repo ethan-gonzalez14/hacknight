@@ -4,8 +4,6 @@
     import Modal from "$lib/Modal.svelte";
 	import Input from '$lib/Input.svelte';
 
-    const username = "alice";
-
     let code_modal = $state(false);
     function get_code_modal() {
         console.log("HEY... WTF")
@@ -16,7 +14,7 @@
     let error = $state("");
     let message = $state("");
     async function find() {
-        const add = await add_relationship(username, code);
+        const add = await add_relationship(data.username, code);
         if (add.error) {
             switch (add.error) {
                 case "CODE_DOES_NOT_EXIST":
@@ -28,7 +26,7 @@
     }
 
     let { data, form }: {
-       data: { loggedIn: boolean; },
+       data: { loggedIn: boolean; username: string; },
        form: { error: string } | { success:true }
     } = $props();
 
@@ -55,7 +53,7 @@
     {/if}
 </Modal>
 
-<Graph cachedPeople={[]} center={username} />
+<Graph cachedPeople={[]} center={data.username} />
 
 <style>
     .add {
