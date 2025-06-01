@@ -5,7 +5,10 @@
 
 <script lang="ts">
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 =======
+=======
+>>>>>>> Stashed changes
 
     import circular from "graphology-layout/circular";
 >>>>>>> Stashed changes
