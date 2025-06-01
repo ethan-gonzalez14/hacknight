@@ -1,7 +1,7 @@
 class Person:
     def __init__(self, name: str, socials: str, friendCode: str):
         self.name = name
-        self.bios = (2, 2)
+        self.bios = [['', ''], ['', '']]  # [[public-personal, public-professional], [private-personal, private-professional]]        
         self.socials = socials
         self.friendCode = friendCode
         self.locations = {} # {'location': 'tally'}
