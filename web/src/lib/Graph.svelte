@@ -7,6 +7,7 @@
     import circular from "graphology-layout/circular";
 	import { onMount } from 'svelte';
     import { browser } from '$app/environment';
+	import { random } from "$lib";
 
     type Person = string;
     type Relationship = {
@@ -34,9 +35,9 @@
         if (browser) {
             const width = canvas.clientWidth;
             const height = canvas.clientHeight;
-            const half_width = width / 2;
-            const half_height = height / 2;
-            console.log("DIMENSIONS", width, height)
+            const half_width = width / 2 / 2;
+            const half_height = height / 2 / 2;
+            console.log("DIMENSIONS", width, height, half_width, half_height)
 
             graph = new (window as (Window & typeof globalThis & { graphology: any })).graphology.Graph();
 
@@ -45,23 +46,25 @@
                 people.add(relationship.person1);
                 people.add(relationship.person2);
             }
-            graph.addNode(center, { label: center, x: half_width, y: half_width, size: 20, color: "orange" });
+            graph.addNode(center, { label: center, x: half_width, y: half_height, size: 20, color: "orange" });
             let angle = 0;
-            let increment = Math.PI * 2 / people.size;
+            let increment = Math.PI * 2 / Math.max(1, people.size - 1);
             for (let person of people) {
                 if (person === center) continue; // Skip the center node
-                console.log(half_width + width*0.25*Math.cos(angle),half_height + height*0.25*Math.sin(angle))
-                console.log("Adding person", person, "at angle", angle * 180 / Math.PI);
-                const x = half_width + width*0.25*Math.cos(angle);
-                const y = half_height + height*0.25*Math.sin(angle);
-                graph.addNode(person, { label: person, x, y, size: 10, color: "lightblue" });
+
+                const random_length = random(0.9, 1);
+                console.log(random_length)
+
+                const x = half_width + half_width * 0.2 * random_length * Math.cos(angle);
+                const y = half_height + half_height * 0.2 * random_length * Math.sin(angle);
+                graph.addNode(person, { label: person, x, y, size: 20, color: "lightblue" });
                 angle += increment;
             }
             for (let relationship of relationships) {
                 graph.addEdge(relationship.person1, relationship.person2, { size: 1, color: "gray" });
             }
 
-            graph.addNode("TEST", { label: "TEST", x: 100, y: 100, size: 10, color: "red" });
+            // graph.addNode("TEST", { label: "TEST", x: 200, y: 150, size: 10, color: "red" });
 
             // circular.assign(graph);
 
