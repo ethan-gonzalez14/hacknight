@@ -151,7 +151,10 @@ class SimpleRequestHandler(BaseHTTPRequestHandler):
 
             for person in people.values():
                 if person.name.lower().startswith(filter) or person.socials.lower().startswith(filter):
-                    self.respond_json(200, {"name": person.name, "socials": person.socials, "degrees": degrees_of_separation(searcher, person.name) })
+                    degrees = degrees_of_separation(searcher, person.name)
+                    print("DEGREES")
+                    print(degrees)
+                    self.respond_json(200, {"name": person.name, "socials": person.socials, "degrees": degrees[1] })
                     return
             self.respond_json(200, { "message": "NO_MATCH" })
 

@@ -43,7 +43,8 @@
 {#if match != null}
 <div class="match">
     <p>{match.username}</p>
-    <p>{match.degrees_of_separation == -1 ? "No Connection" : match.degrees_of_separation + 1}</p>
+    <p>{match.degrees_of_separation.length == 0 ? "No Connection" : match.degrees_of_separation.length}</p>
+    <p>{match.degrees_of_separation.join(" -> ")}</p>
 </div>
 {/if}
 

@@ -8,5 +8,5 @@ export type Relationship = {
 export type User = {
 	username: string;
 	socials: string;
-	degrees_of_separation: number;
+	degrees_of_separation: string[];
 };
