@@ -1,3 +1,17 @@
+relationships = []
+
+class Relationship:
+    def __init__(self, person1: str, person2: str, time: int, location: str, context: str, friends: bool):
+        self.person1 = person1
+        self.person2 = person2
+        self.time = time
+        self.location = location
+        self.context = context
+        self.friends = friends
+    def __repr__(self):
+        return f"Relationship({self.person1}, {self.person2}, {self.time}, {self.location}, {self.context}, {self.friends})"
+
+
 def run(query: str):
     """
     Executes a SQL query against the database.
@@ -11,3 +25,36 @@ def insert_relationship(person1: str, person2: str, time: int, location: str, co
     Inserts a relationship between person1 and person2, made at the time and location, into the database.
     An optional context about how they met can also be provided.
     """
+    relationships.append(Relationship(person1, person2, time, location, context, friends))
+
+def get_relationships(person: str) -> list[Relationship]:
+    """
+    Returns a list of relationships involving the specified person.
+    """
+    return [rel for rel in relationships if rel.person1 == person or rel.person2 == person]
+
+def degrees_of_separation(person1: str, person2: str) -> int:
+    """
+    Returns the minimum number of relationships between person1 and person2.
+    """
+
+    visited = set()
+    queue = [(person1, 0)]  # (current person, current degree)
+    
+    while queue:
+        current_person, degree = queue.pop(0)
+        
+        if current_person == person2:
+            return degree
+        
+        if current_person in visited:
+            continue
+        
+        visited.add(current_person)
+        
+        for rel in get_relationships(current_person):
+            next_person = rel.person1 if rel.person2 == current_person else rel.person2
+            if next_person not in visited:
+                queue.append((next_person, degree + 1))
+    
+    return -1  # If no relationship found
