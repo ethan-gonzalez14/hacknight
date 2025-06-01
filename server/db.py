@@ -3,7 +3,7 @@ import json
 class Person:
     def __init__(self, name: str, socials: str, friendCode: str):
         self.name = name
-        self.bios = [['', ''], ['', '']]  # [[public-personal, public-professional], [private-personal, private-professional]]
+        self.public_bio = self.private_bio = ''  # [[public-personal, public-professional], [private-personal, private-professional]]
         self.socials = socials
         self.friendCode = friendCode
         self.locations = {} # {'location': 'tally'}
@@ -12,7 +12,8 @@ class Person:
     def jsonify(self):
         return json.dumps({
             "name": self.name,
-            "bios": self.bios,
+            "personalBio": self.public_bio,
+            "professionalBio": self.private_bio,
             "socials": self.socials,
             "friendCode": self.friendCode,
             "locations": self.locations
