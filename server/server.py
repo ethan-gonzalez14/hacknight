@@ -33,9 +33,10 @@ class SimpleRequestHandler(BaseHTTPRequestHandler):
 
         if path == '/add-connection':
             print(f"BODY: {body}")
-            (name, code, level) = body.split(' ')
-
-            print(name, code, level)
+            name, code, level, *words = body.split(' ')
+            name = name.lower()
+            level = level.lower()
+            context = ' '.join(words)
 
             if not name or not code:
                 self.respond_json(400, {"error": "Missing name or friend parameter"})
@@ -78,7 +79,7 @@ class SimpleRequestHandler(BaseHTTPRequestHandler):
                 self.respond_json(200, {"error": "ALREADY_CONNECTED"})
                 return
 
-            add_relationship(Relationship(name.lower(), otherPerson.name.lower(), 0, "Unknown", "Unknown", level.lower()))
+            add_relationship(Relationship(name.lower(), otherPerson.name.lower(), 0, "Unknown", context, level.lower()))
 
             self.respond_json(200, {"message": "200 OK"})
             return

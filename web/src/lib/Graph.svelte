@@ -20,6 +20,7 @@
     let updatedCenter = $state(center);
 
     const level_colors: Record<string, string> = {
+        "best_friends": "#006400",
         "family": "#db1f54",
         "friends": "green",
         "work": "orange",
@@ -35,7 +36,9 @@
         modal_showing = true;
     }
 
-    let person: Record<string, any> | null = $state(null);
+    let person: Record<string, any> | null = $state({});
+    // The relationship between the center person and the clicked person
+    let highlighted_relationship: Relationship | null = $state(null);
 
     if (browser) {
         onMount(async () => {
@@ -60,12 +63,21 @@
                     const attributes = graph.getNodeAttributes(node);
                     modal_showing = true;
 
+                    if (relationship_map[attributes.label]) {
+                        highlighted_relationship = relationship_map[attributes.label];
+                    } else {
+                        highlighted_relationship = null;
+                    }
+
                     person = await get_person(attributes.label);
-                    console.log(person)
+                    console.log("PERSON: " , person)
+                    console.log("HIGHLIGHTED RELATIONSHIP: " , highlighted_relationship)
                 });
                 renderer.getGraph().clear();
                 
                 const relationships: Relationship[] = (await get_relationships(updatedCenter)).relationships;
+                // Relationships the center person has with the others
+                let relationship_map: Record<string, Relationship> = {};
 
                 const width = canvas.clientWidth;
                 const height = canvas.clientHeight;
@@ -77,6 +89,10 @@
                 for (let relationship of relationships) {
                     people.add(relationship.person1);
                     people.add(relationship.person2);
+
+                    if (relationship.person1 == center || relationship.person2 == center) {
+                        relationship_map[relationship.person1 == center ? relationship.person2 : relationship.person1] = relationship;
+                    }
                 }
                 let angle = 0;
                 let increment = Math.PI * 2 / Math.max(1, people.size - 1);
@@ -92,7 +108,7 @@
                     angle += increment;
                 }
                 for (let relationship of relationships) {
-                    graph.addEdge(relationship.person1, relationship.person2, { size: 5, color: level_colors[relationship.level] });
+                    graph.addEdge(relationship.person1, relationship.person2, { size: 5, label: "hey!", color: level_colors[relationship.level] });
                 }
          
         });
@@ -117,20 +133,20 @@
 </script>
 
 <Modal visible={modal_showing} changeVisible={(vis) => modal_showing = vis}>
-{#if person}
     <!-- <img src="/your-image.jpg" alt="Popup Image" class="popup-image" /> -->
+{#if person}
     <div class="popup-text">
         <h2>{person.name}</h2>
 
-        {#if person.socials.length > 0}
+        {#if person.socials?.length > 0}
         <span style="color: gray;">@{person.socials}</span>
         {/if}
 
         <p><span class="bio">Public Bio:</span> {person.publicBio}</p>
         <p style="margin-bottom: 24px;"><span class="bio">Private Bio:</span> {person.privateBio}</p>
-        <SocialButton label="{person.name}'s Graph" width="50%" height="20%" onClick={() => handleSocialClick(person.name)} />
+        <SocialButton label="{person.name}'s Web" width="100%" height="20%" onClick={() => handleSocialClick(person.name)} />
 
-        {#if person.name.toLowerCase() == center.toLowerCase()}
+        {#if person.name?.toLowerCase() == center.toLowerCase()}
 
         {#await getCode()}
         <p>Loading your friend code from our Web Magic...</p>
@@ -139,6 +155,9 @@
         {/await}
 
         <h2>Change Bio</h2>
+
+        <br/>
+
         <!-- <Input type="text" name="publicBio" placeholder="Add Public Bio" />
         <Input type="text" name="privateBio" placeholder="Add Private Bio" /> -->
         <form on:submit|preventDefault={handleSubmit}>
@@ -147,6 +166,8 @@
             <SocialButton label="Submit Changes" width="100%" height="10%" type="submit"></SocialButton>
             <!-- <button type="submit">Save Person</button> -->
         </form>
+        {:else if highlighted_relationship}
+            <h3>{highlighted_relationship.context}</h3>
         {/if}
     </div>
 {/if}
