@@ -2,7 +2,7 @@
     import { add_relationship, get_relationships }  from '$lib/query-server';
     import Graph from "$lib/Graph.svelte";
     import Modal from "$lib/Modal.svelte";
-	import { onMount } from 'svelte';
+	import Input from '$lib/Input.svelte';
 
     const username = "alice";
 
@@ -90,20 +90,90 @@
 
 {:else}
 
-<form method="POST">
-    <input type="text" name="username" placeholder="Username" required />
-    @<input type="text" name="socials" placeholder="Social Media Handles" />
-    <button type="submit" formaction="?/login">Log In</button>
-    <button type="submit" formaction="?/register">Sign Up</button>
-</form>
-{#if form && 'error' in form}
-    <p class="error">{form.error}</p>
-{/if}
+<div class="container">
+    <h1>Gain personal <span style="text-decoration: underline;">and</span> professional contacts, all in one place.</h1>
+
+    <p>&lbrace;PRODUCT NAME&rbrace; makes it easy to remember who's who. And don't worry about your boss finding out your secret nightlife
+        drug dealing or having a dance fiesta --- control who sees your public and private bios.
+    </p>
+
+    <h1>Enough Talk. Get Talking.</h1>
+    <br/>
+
+    <div class="login-container">
+        <div class="form-container">
+            <form method="POST">
+                <b>Sign Up Today To Stay Connected</b>
+                <Input type="text" name="username" placeholder="Username" required />
+                <p>@</p>
+                <Input type="text" name="socials" placeholder="Social Media Handles" />
+                <button type="submit" formaction="?/login">Log In</button>
+                <br/>
+                <button type="submit" formaction="?/register">Sign Up</button>
+            </form>
+
+            <p class="error">
+                {#if form && 'error' in form}
+                    {form.error}
+                {/if}
+            </p>
+        </div>
+    </div>
+</div>
 
 {/if}
 
-<style>
-    .error {
-        color: red;
+<style lang="scss">
+    h1 {
+        font-size: 3rem;
     }
+    h1, p {
+        width: 100%;
+        text-align: center;
+    }
+	button {
+		background-color: #9e9bf8;
+		color: white;
+		border: none;
+
+		padding: 7px 8px;
+		border-radius: 0;
+	}
+
+	.container {
+		width: 100%;
+		height: 100%;
+		display: flex;
+        flex-direction: column;
+		align-items: center;
+	}
+	.error {
+		color: red;
+		margin: 0;
+	}
+
+	.login-container {
+		width: 40%;
+
+		border-radius: 10px;
+		border: 2px solid lightgrey;
+
+		padding: 5px 10px;
+	}
+	.login-container form {
+		width: 100%;
+		display: flex;
+		flex-direction: column;
+		gap: 10px;
+	}
+	@media (max-width: 1000px) {
+		.login-container {
+			width: 70%;
+		}
+	}
+	@media (max-width: 700px) {
+		.login-container {
+			width: 90%;
+		}
+	}
 </style>
