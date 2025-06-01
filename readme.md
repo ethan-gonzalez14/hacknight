@@ -2,15 +2,15 @@
 
 ## Our HacKnight 2025 Project :)
 
-### We want p
+### The app that maps your real-world connections.
 
-### Pitch
+#### No app today does such a thing. Imagine a world in which
 
 ### Technologies Implemented
 
 - Python Backend Database
 
-## Us
+## Contributers
 
 ---
 

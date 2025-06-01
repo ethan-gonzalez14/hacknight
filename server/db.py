@@ -41,7 +41,7 @@ def get_relationships(person: str) -> list[Relationship]:
     """
     return [rel for rel in relationships if rel.person1 == person or rel.person2 == person]
 
-def degrees_of_separation(person1: str, person2: str) -> int:
+def degrees_of_separation(person1: str, person2: str) -> tuple[int, list[Relationship]]:
     """
     Returns the minimum number of relationships between person1 and person2.
     """
@@ -53,7 +53,7 @@ def degrees_of_separation(person1: str, person2: str) -> int:
         current_person, degree = queue.pop(0)
         
         if current_person == person2:
-            return degree
+            return (degree, queue)
         
         if current_person in visited:
             continue
