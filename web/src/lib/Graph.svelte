@@ -15,24 +15,24 @@
 
     const center: Person = "Kiyaan";
     const relationships: Relationship[] = [
-    { person1: "Kiyaan", person2: "Aarav", level: 1 },
-    { person1: "Kiyaan", person2: "Vivaan", level: 2 },
-    { person1: "Kiyaan", person2: "Reyansh", level: 3 },
-    { person1: "Kiyaan", person2: "Anvi", level: 4 },
-    { person1: "Kiyaan", person2: "Aarvi", level: 5 },
-    { person1: "Aarvi", person2: "Anvi", level: 2 },
-    { person1: "Kiyaan", person2: "Aaradhya", level: 3 },
-    { person1: "Kiyaan", person2: "Saanvi", level: 1 },
-    { person1: "Saanvi", person2: "Aaradhya", level: 4 },
+    { person1: "Kiyaan", person2: "Aarav", context: "family" },
+    { person1: "Kiyaan", person2: "Vivaan", context: "friend" },
+    { person1: "Kiyaan", person2: "Reyansh", context: "work" },
+    { person1: "Kiyaan", person2: "Anvi", context: "work" },
+    { person1: "Kiyaan", person2: "Aarvi", context: "family" },
+    { person1: "Aarvi", person2: "Anvi", context: "work" },
+    { person1: "Kiyaan", person2: "Aaradhya", context: "school" },
+    { person1: "Kiyaan", person2: "Saanvi", context: "online" },
+    { person1: "Saanvi", person2: "Aaradhya", context: "romantic" },
 ];
 
-    const levelColors: Record<number, string> = {
-        1: "red",
-        2: "orange",
-        3: "yellow",
-        4: "blue",
-        5: "violet"
-    };
+    // const levelColors: Record<number, string> = {
+    //     1: "red",
+    //     2: "orange",
+    //     3: "yellow",
+    //     4: "blue",
+    //     5: "violet"
+    // };
 
     let canvas: HTMLDivElement;
     let graph: any;
