@@ -41,7 +41,7 @@ export async function create_user(
 		console.log(result);
 		return result;
 	} catch (error) {
-		throw error;
+		return { error };
 	}
 }
 

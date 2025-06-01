@@ -72,6 +72,7 @@ class SimpleRequestHandler(BaseHTTPRequestHandler):
                 self.respond_json(400, {"error": "Username already exists"})
                 return
             new_person = Person(username, f"{handle}", gen_random_code())
+            people[username] = new_person
             self.respond_json(200, {"message": "200 OK"})
             return
 
