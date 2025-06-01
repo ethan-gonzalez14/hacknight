@@ -6,6 +6,8 @@
 
 <style>
 	.social-button {
+        height: 80px;
+        width: 120px;
 		padding: 10px 20px;
 		background-color: #1c86ee;
 		color: white;
