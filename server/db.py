@@ -1,3 +1,31 @@
+class Person:
+    def __init__(self, name: str, socials: str, friendCode: str):
+        self.name = name
+        self.bios = (2, 2)
+        self.socials = socials
+        self.friendCode = friendCode
+        self.locations = {} # {'location': 'tally'}
+    def __repr__(self):
+        return f"Person({self.name}, {self.bios}, {self.socials})"
+    def jsonify(self):
+        return f"""{
+            "name": {self.name},
+            "bios": {self.bios},
+            "socials": {self.socials}
+        }"""
+
+
+def setBio(person: Person, bio: str, visibility: int, nature: int): # visibility: [public, private]; nature: [personal, professional]
+    person.bios[visibility][nature] = bio
+
+def setSocials(person: Person, socials: str):
+    person.socials = socials
+
+def setLocationTally(person1: Person, person2: Person, location: str):
+    person1.locations[location] += 1
+    person2.locations[location] += 1
+
+
 relationships = []
 
 class Relationship:
@@ -28,20 +56,21 @@ def run(query: str):
     raise NotImplementedError("This function should be implemented to run SQL queries against your database.")
 
 
-def insert_relationship(person1: str, person2: str, time: int, location: str, context: str, friends: bool):
+def insert_relationship(person1: Person, person2: Person, time: int, location: str, context: str, friends: bool):
     """
     Inserts a relationship between person1 and person2, made at the time and location, into the database.
     An optional context about how they met can also be provided.
     """
     relationships.append(Relationship(person1, person2, time, location, context, friends))
+    setLocationTally(person1, person2, location)
 
-def get_relationships(person: str) -> list[Relationship]:
+def get_relationships(person: Person) -> list[Relationship]:
     """
     Returns a list of relationships involving the specified person.
     """
     return [rel for rel in relationships if rel.person1 == person or rel.person2 == person]
 
-def degrees_of_separation(person1: str, person2: str) -> tuple[int, list[Relationship]]:
+def degrees_of_separation(person1: Person, person2: Person) -> tuple[int, list[Relationship]]:
     """
     Returns the minimum number of relationships between person1 and person2.
     """
@@ -66,4 +95,3 @@ def degrees_of_separation(person1: str, person2: str) -> tuple[int, list[Relatio
                 queue.append((next_person, degree + 1))
     
     return -1  # If no relationship found
-

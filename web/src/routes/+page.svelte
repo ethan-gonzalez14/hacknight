@@ -1,7 +1,8 @@
 <script>
-	import Node from '$lib/Node.svelte';
+    // import Graph from "$lib/Graph.svelte";
+    import Node from '$lib/Node.svelte';
 	import SocialButton from '$lib/SocialButton.svelte';
-	import { fade, scale } from 'svelte/transition';
+    import { fade, scale } from 'svelte/transition';
 
 
 	let visible = false;
@@ -18,6 +19,8 @@
     alert("Social Button clicked!");
   	}
 </script>
+
+<!-- <Graph /> -->
 
 <Node onClick={handleButtonClick} />
 

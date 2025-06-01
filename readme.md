@@ -1,6 +1,6 @@
 # MyWeb (CHANGE NAME)
 
-## Our HacKnight 2025 Project :)
+## Our HacKnight 2025 Project ^^
 
 ### The app that maps your real-world connections.
 
