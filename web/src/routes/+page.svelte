@@ -237,6 +237,9 @@ input {
             </p>
         </div>
     </div>
+
+    <div id="background"></div>
+    
 </div>
 
 {/if}
@@ -269,6 +272,14 @@ input {
 		color: red;
 		margin: 0;
 	}
+
+    #background {
+        background-image: url('/background.png');
+        background-size: cover;
+        background-position: center;
+        width: 100vw;
+        height: 100vh;
+    }
 
 	.login-container {
 		width: 40%;
