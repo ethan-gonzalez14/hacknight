@@ -91,8 +91,8 @@
 <div class="container">
     <h1>Gain personal <span style="text-decoration: underline;">and</span> professional contacts, all in one place.</h1>
 
-    <p>&lbrace;PRODUCT NAME&rbrace; makes it easy to remember who's who. And don't worry about your boss finding out your secret nightlife
-        drug dealing or having a dance fiesta --- control who sees your public and private bios.
+    <p>The Web makes it easy to remember who's who. And don't worry about your boss finding out your secret nightlife
+        drug dealing or having a dance fiesta — control who sees your public and private bios.
     </p>
 
     <h1>Enough Talk. Get Talking.</h1>

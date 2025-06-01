@@ -96,6 +96,9 @@ def add_relationship(relationship: Relationship):
     # TODO: Set location tally for the relationship
     # Assuming person1 and person2 are already set in the relationship
     # setLocationTally(relationship.person1, relationship.person2, relationship.location)
+    if relationship.person1 and relationship.person2:
+        setLocationTally(relationship.person1, relationship.person2, relationship.location)
+
 
 def degrees_of_separation(person1: str, person2: str) -> tuple[int, list[Relationship]]:
     """

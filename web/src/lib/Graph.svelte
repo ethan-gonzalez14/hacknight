@@ -112,7 +112,7 @@
             updatedCenter = name;
         } else {
             console.log('Social button clicked for center:', center);
-        }
+        } 
         modal_showing = false;
     }
     let code: string | null = $state(null);
