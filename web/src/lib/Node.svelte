@@ -14,7 +14,7 @@
 </style>
 
 <script>
-    export let text = "Click me";
+    export let text = "username";
     export let onClick = () => {};
   </script>
   

@@ -1,0 +1,20 @@
+<script>
+	export let onClick;
+</script>
+
+<button on:click={onClick} class="social-button"> My Web </button>
+
+<style>
+	.social-button {
+		padding: 10px 20px;
+		background-color: #1c86ee;
+		color: white;
+		border: none;
+		border-radius: 5px;
+		cursor: pointer;
+	}
+
+	.social-button:hover {
+		background-color: #155a9c;
+	}
+</style>
