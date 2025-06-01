@@ -74,9 +74,11 @@
 </div>
 <Modal visible={code_modal} changeVisible={(val: boolean) => code_modal = val} >
     <h2>Friend Codes</h2>
+    <br/>
     <Input type="text" name="friendCode" bind:value={code} placeholder="Enter a friend's code here" multiline={false} />
+    <br/>
     <input placeholder="And your relationship here" list="relationship" name="relationship" bind:value={relationship} />
-    <datalist id="relationship">
+    <datalist id="relationship" >
         <option value="Friends">Friends 😎</option>
         <option value="Family">Family 🥰</option>
         <option value="Romantic">Romantic 💋</option>
@@ -84,7 +86,7 @@
         <option value="Work">Profressional 💼</option>
     </datalist>
     <br/> <br/>
-    <SocialButton class="find" label="Find Your Friend" onClick={find} width="140px" height="60px"/>
+    <SocialButton class="find" label="Find Your Friend" onClick={find} width="100%" height="60px"/>
     <!-- <button class="find" onclick={find}>Find Your Friend</button> -->
     {#if error}
     <p class="red">{error}</p>

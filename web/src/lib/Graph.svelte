@@ -166,9 +166,9 @@
         background-color: #222222;
     }
     .graph {
-        width: 90%;
-        height: 95%;
-        border: 2px solid #000;
+        width: 100%;
+        height: 100%;
+        /* border: 2px solid #000; */
         touch-action: manipulation;
     }
     .bio {
