@@ -4,6 +4,9 @@
     import Node from '$lib/Node.svelte';
 	import SocialButton from '$lib/SocialButton.svelte';
     import { fade, scale } from 'svelte/transition';
+	import Modal from '$lib/Modal.svelte';
+	import Component from '$lib/Component.svelte';
+	import { onMount } from 'svelte';
 
 
 	let visible = false;
@@ -20,7 +23,8 @@
     alert("Social Button clicked!");
   	}
 
-    get_relationships("Bob").then((a: any) => console.log(a));
+    onMount(() => {
+    get_relationships("Bob").then((a: any) => console.log(a));})
 </script>
 
 <Graph cachedPeople={[]} />

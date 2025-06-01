@@ -47,13 +47,17 @@ class SimpleRequestHandler(BaseHTTPRequestHandler):
         path = parsed_path.path
         query_params = parse_qs(parsed_path.query)
 
+
         if path == '/get-person':
             name = query_params.get("name", [None])[0]
             if name.lower() in people:
                 person = people[name.lower()]
-                self.respond_json(200, person.jsonify())
+                # self.respond_json(200, person.jsonify())
+                self.respond_json(200, {})
+                return
             else:
                 self.respond_json(404, {"error": "Person not found"})
+                return
 
         elif path == '/get-relationships':
             name = query_params.get("name", [None])[0]
@@ -61,17 +65,22 @@ class SimpleRequestHandler(BaseHTTPRequestHandler):
                 rels = get_relationships(name.lower())
 
                 rel_json = [rel.jsonify(name.lower()) for rel in rels]
+                print(rel_json)
 
                 print("about to respond correctly!!!")
                 self.respond_json(200, { "relationships": rel_json })
+                return
             else:
                 self.respond_json(404, {"error": "Person not found"})
+                return
 
         else:
             self.respond_json(404, {"error": "Unknown path"})
+            return
 
     def respond_json(self, status_code, content):
         self.send_response(status_code)
+        self.send_header('Access-Control-Allow-Origin', '*')
         self.send_header('Content-Type', 'application/json')
         self.end_headers()
         if isinstance(content, str):

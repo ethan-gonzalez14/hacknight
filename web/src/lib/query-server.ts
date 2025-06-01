@@ -22,6 +22,7 @@ export async function add_relationship(person1: string, person2: string): Promis
 }
 export async function get_relationships(person: string): Promise<any> {
 	try {
+		console.log('TRYING FOR ' + server + '/get-relationships?name=' + person);
 		const response = await fetch(server + '/get-relationships?name=' + person);
 
 		if (!response.ok) {
@@ -29,6 +30,7 @@ export async function get_relationships(person: string): Promise<any> {
 		}
 
 		const result = await response.json();
+		console.log(result);
 		return result;
 	} catch (error) {
 		throw error;
