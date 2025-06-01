@@ -29,7 +29,7 @@
     ];
 
     let canvas: HTMLDivElement;
-    let graph;
+    let graph: any;
 
     onMount(() => {
         if (browser) {
@@ -63,12 +63,8 @@
             for (let relationship of relationships) {
                 graph.addEdge(relationship.person1, relationship.person2, { size: 1, color: "gray" });
             }
-
-            // graph.addNode("TEST", { label: "TEST", x: 200, y: 150, size: 10, color: "red" });
-
-            // circular.assign(graph);
-
-            const renderer = new Sigma(
+            
+            const renderer = new (window as any).Sigma(
                 graph,
                 canvas
             );
@@ -76,14 +72,6 @@
                 const node = event.node;
                 console.log("Clicked node:", node, graph.getNodeAttributes(node));
             });
-            // renderer.getCamera().setState({
-            // x: half_width,       // Center the camera on (400, 400)
-            // y: half_height,
-            // ratio: 1,     // No zoom (1 canvas unit = 1 layout unit)
-            // angle: 0,
-            // });
-
-            // renderer.refresh();
         }
     });
     

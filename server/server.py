@@ -2,13 +2,13 @@ from http.server import BaseHTTPRequestHandler, HTTPServer
 from urllib.parse import urlparse, parse_qs
 import json
 
-from db import get_person  # Assuming this function is defined in db module
-from db import Person, Relationship, relationships
+from db import get_relationships  # Assuming this function is defined in db module
+from db import Person
 
 # Dummy registry
 people = {
-    "alice": Person("Alice", "@alice", "1234"),
-    "bob": Person("Bob", "@bob", "5678")
+    "alice": Person("Alice", "@alice07", "1234"),
+    "bob": Person("Bob", "@bobthebob", "5678")
 }
 
 class SimpleRequestHandler(BaseHTTPRequestHandler):
@@ -17,19 +17,28 @@ class SimpleRequestHandler(BaseHTTPRequestHandler):
         path = parsed_path.path
         query_params = parse_qs(parsed_path.query)
 
-        known_paths = ['/get-person', '/get-relationship']
-
-        if path in known_paths:
-            if path == '/get-person':
-                name = query_params.get("name", [None])[0]
-                if name and name.lower() in people:
-                    person = people[name.lower()]
-                    self.respond_json(200, person.jsonify())
-                else:
-                    self.respond_json(404, {"error": "Person not found"})
-
+        if path == '/get-person':
+            name = query_params.get("name", [None])[0]
+            if name and name.lower() in people:
+                person = people[name.lower()]
+                self.respond_json(200, person.jsonify())
             else:
-                self.respond_json(404, {"error": "Unknown path"})
+                self.respond_json(404, {"error": "Person not found"})
+
+        elif path == '/get-relationships':
+            name = query_params.get("name", [None])[0]
+            if name and name.lower() in people:
+                person = people[name.lower()]
+                rels = get_relationships(person)
+
+                rel_json = [rel.jsonify(person.name) for rel in rels]
+
+                self.respond_json(200, rel_json)
+            else:
+                self.respond_json(404, {"error": "Person not found"})
+
+        else:
+            self.respond_json(404, {"error": "Unknown path"})
 
     def respond_json(self, status_code, content):
         self.send_response(status_code)
