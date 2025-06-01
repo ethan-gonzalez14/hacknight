@@ -93,11 +93,7 @@
                     angle += increment;
                 }
                 for (let relationship of relationships) {
-<<<<<<< HEAD
                     graph.addEdge(relationship.person1, relationship.person2, { size: 5, color: level_colors[relationship.level] });
-=======
-                    graph.addEdge(relationship.person1, relationship.person2, { size: 10, color: `purple` });
->>>>>>> df25cad0a6c4d4e1e1d0145e13e6632a2f6814da
                 }
          
         });
