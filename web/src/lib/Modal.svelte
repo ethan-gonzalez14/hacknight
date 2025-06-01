@@ -54,5 +54,6 @@
 		border-radius: 25px;
 		border: 2px solid #000;
 		box-shadow: 0 0 15px rgba(0, 0, 0, 0.4);
+		overflow-y: auto;
 	}
 </style>

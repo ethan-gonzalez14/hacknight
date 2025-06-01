@@ -16,6 +16,7 @@
     let relationship = "";
     let error = $state("");
     let message = $state("");
+    let how_met = $state("");
     async function find() {
         let processed = relationship.toLowerCase();
         switch (processed) {
@@ -34,8 +35,17 @@
             error = "Please enter a code.";
             return;
         }
+        if (how_met.length > 10) {
+            console.log(how_met.length);
+            error = "Please enter a valid 'How did you meet?' description. It should be 10 characters or less.";
+            return;
+        }
+        if (!/[0-9]+/.test(code)) {
+            error = "Please enter a valid code. It should only contain numbers.";
+            return;
+        }
 
-        const add = await add_relationship(data.username, code, processed);
+        const add = await add_relationship(data.username, code, processed, how_met);
         if (add.error) {
             switch (add.error) {
                 case "CODE_DOES_NOT_EXIST":
@@ -52,6 +62,7 @@
                     break;
             }
         }
+
         else message = "Friend added successfully! Reload to see changes";
     }
 
@@ -81,18 +92,35 @@
 </div>
 <Modal visible={code_modal} changeVisible={(val: boolean) => code_modal = val} >
     <h2>Friend Codes</h2>
+
+    <br/>
+
+    <Input type="text" name="friendCode" bind:value={code} placeholder="Enter a friend's code here" multiline={false} />
+
+    <br/>
+
+    <input placeholder="And your relationship here" list="relationship" name="relationship" class="datalist-input" bind:value={relationship} />
+    <datalist id="relationship">
     <br/>
     <Input type="text" name="friendCode" bind:value={code} placeholder="Enter a friend's code here" multiline={false} />
     <br/>
     <input placeholder="And your relationship here" list="relationship" name="relationship" bind:value={relationship} />
     <datalist id="relationship" >
         <option value="Friends">Friends 😎</option>
+        <option value="Best_Friends">BFFS 😊</option>
         <option value="Family">Family 🥰</option>
         <option value="Romantic">Romantic 💋</option>
         <option value="Married">Married 🤱</option>
         <option value="Work">Profressional 💼</option>
     </datalist>
     <br/> <br/>
+
+    <input type="text" placeholder="How did you two meet? (10 chars)" bind:value={how_met} class="context">
+
+    <br/><br/>
+
+    <SocialButton class="find" label="Find Your Friend" onClick={find} width="100%" />
+    
     <SocialButton class="find" label="Find Your Friend" onClick={find} width="100%" height="60px"/>
     <!-- <button class="find" onclick={find}>Find Your Friend</button> -->
     {#if error}
@@ -106,6 +134,10 @@
 <Graph cachedPeople={[]} center={data.username} />
 
 <style lang="scss">
+    .datalist-input,
+    .context {
+        width: 100%;
+    }
     .red {
         color: red;
     }
