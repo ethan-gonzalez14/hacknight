@@ -48,12 +48,25 @@
                 
                 // TODO: Figure out why this isn't working
                 // renderer.getGraph().clear();
+                // const renderer = new (window as any).Sigma(
+                //     graph,
+                //     canvas,
+                //     {
+                //         defaultNodeLabelColor: "#000000"
+                //     }
+                // );    
                 const renderer = new (window as any).Sigma(
-                    graph,
-                    canvas,
-                    {
-                        defaultNodeLabelColor: "#ff0000"                    }
-                );     
+                graph,
+                canvas,
+                {
+                    labelColor: {
+                    color: "attribute",         // Tells Sigma to use the node attribute
+                    attribute: "labelColor",    // Attribute name you're using
+                    },
+                    defaultNodeLabelColor: "#ffffff"  // Optional fallback
+                }
+                ); 
+                
                 renderer.on("clickNode", async (event: any) => {
                     const node = event.node;
                     console.log("Clicked node:", node, graph.getNodeAttributes(node));
@@ -73,7 +86,15 @@
                 const half_height = height / 4;
 
                 let people: Set<string> = new Set();
-                graph.addNode(updatedCenter, { label: updatedCenter, x: half_width, y: half_height, size: 30, color: "#f8f6d8" });
+                // graph.addNode(updatedCenter, { label: updatedCenter, x: half_width, y: half_height, size: 30, color: "#f8f6d8", labelColor: "#00ff00" });
+                graph.addNode(updatedCenter, {
+                label: updatedCenter,
+                x: half_width,
+                y: half_height,
+                size: 30,
+                color: "#f8f6d8",
+                labelColor: "#ffffff"  // white label color
+                });
                 for (let relationship of relationships) {
                     people.add(relationship.person1);
                     people.add(relationship.person2);
