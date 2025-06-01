@@ -29,15 +29,22 @@ def setSocials(person: Person, socials: str):
 relationships = []
 
 class Relationship:
-    def __init__(self, person1: str, person2: str, time: int, location: str, context: str, friends: bool):
+    def __init__(self,
+                 person1: str,
+                 person2: str,
+                 time: int,
+                 location: str,
+                 context: str,
+                 # "friend" or "work" "married" or "family" or "romantic"
+                 level: str):
         self.person1 = person1
         self.person2 = person2
         self.time = time
         self.location = location
         self.context = context
-        self.friends = friends
+        self.level = level
     def __repr__(self):
-        return f"Relationship({self.person1}, {self.person2}, {self.time}, {self.location}, {self.context}, {self.friends})"
+        return f"Relationship({self.person1}, {self.person2}, {self.time}, {self.location}, {self.context}, {self.level})"
     def jsonify(self):
         return {
             "person1": self.person1,
@@ -45,7 +52,7 @@ class Relationship:
             "time": self.time,
             "location": self.location,
             "context": self.context,
-            "friends": self.friends
+            "level": self.level
         }
 
 

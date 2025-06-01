@@ -13,18 +13,19 @@
     import SocialButton from './SocialButton.svelte';
     import Input from './Input.svelte';
 	import { get_person, get_relationships, get_user_code } from './query-server';
+	import { getByPlaceholderText } from '@testing-library/svelte';
 
     let { cachedPeople, center }: { cachedPeople: Person[]; center: Person } = $props();
 
     let updatedCenter = $state(center);
 
-    // const levelColors: Record<number, string> = {
-    //     1: "red",
-    //     2: "orange",
-    //     3: "yellow",
-    //     4: "blue",
-    //     5: "violet"
-    // };
+    const level_colors: Record<string, string> = {
+        "family": "#db1f54",
+        "friends": "green",
+        "work": "orange",
+        "married": "purple",
+        "romantic": "pink"
+    };
 
     let canvas: HTMLDivElement;
     let graph: any;
@@ -34,9 +35,7 @@
         modal_showing = true;
     }
 
-    let person: Record<string, any> = $state({
-
-    });
+    let person: Record<string, any> | null = $state(null);
 
     if (browser) {
         onMount(async () => {
@@ -66,23 +65,16 @@
                 });
                 renderer.getGraph().clear();
                 
-                console.log(canvas.childNodes)
-                console.log("UPDATED CENTER", updatedCenter);
-
                 const relationships: Relationship[] = (await get_relationships(updatedCenter)).relationships;
-                console.log(relationships)
 
                 const width = canvas.clientWidth;
                 const height = canvas.clientHeight;
                 const half_width = width / 4;
                 const half_height = height / 4;
-                console.log("DIMENSIONS", width, height, half_width, half_height)
-                console.log(relationships)
 
                 let people: Set<string> = new Set();
                 graph.addNode(updatedCenter, { label: updatedCenter, x: half_width, y: half_height, size: 30, color: "#f8f6d8" });
                 for (let relationship of relationships) {
-                    console.log("RELATIONSHIP", relationship)
                     people.add(relationship.person1);
                     people.add(relationship.person2);
                 }
@@ -100,22 +92,15 @@
                     angle += increment;
                 }
                 for (let relationship of relationships) {
-                    graph.addEdge(relationship.person1, relationship.person2, { size: 10, color: `purple` });
+                    graph.addEdge(relationship.person1, relationship.person2, { size: 5, color: level_colors[relationship.level] });
                 }
          
         });
     });
     }
     
-
     function handleSocialClick(name: string) {
-        console.log('Social button clicked');
-        if (updatedCenter != name) {
-            console.log('Social button clicked for:', name);
-            updatedCenter = name;
-        } else {
-            console.log('Social button clicked for center:', center);
-        } 
+        if (updatedCenter != name) updatedCenter = name;
         modal_showing = false;
     }
 
@@ -127,21 +112,32 @@
     // Dynamically load the code for the center person when we need it
     async function getCode() {
         if (code == null) code = (await get_user_code(center)).friendCode;
+        return true;
     }
 </script>
 
 <Modal visible={modal_showing} changeVisible={(vis) => modal_showing = vis}>
-    <img src="/your-image.jpg" alt="Popup Image" class="popup-image" />
+{#if person}
+    <!-- <img src="/your-image.jpg" alt="Popup Image" class="popup-image" /> -->
     <div class="popup-text">
         <h2>{person.name}</h2>
+
+        {#if person.socials.length > 0}
         <span style="color: gray;">@{person.socials}</span>
+        {/if}
+
         <p><span class="bio">Public Bio:</span> {person.publicBio}</p>
         <p style="margin-bottom: 24px;"><span class="bio">Private Bio:</span> {person.privateBio}</p>
         <SocialButton label="{person.name}'s Graph" width="50%" height="20%" onClick={() => handleSocialClick(person.name)} />
-        {#if person.name == center}
-        {#if getCode()}
+
+        {#if person.name.toLowerCase() == center.toLowerCase()}
+
+        {#await getCode()}
+        <p>Loading your friend code from our Web Magic...</p>
+        {:then success}
         <p style="margin-bottom: 24px;"><span>Your Code:</span> {code}</p>
-        {/if}
+        {/await}
+
         <h2>Change Bio</h2>
         <!-- <Input type="text" name="publicBio" placeholder="Add Public Bio" />
         <Input type="text" name="privateBio" placeholder="Add Private Bio" /> -->
@@ -153,15 +149,27 @@
         </form>
         {/if}
     </div>
+{/if}
 </Modal>
-<div class="graph" bind:this={canvas}></div>
+
+<div class="graph-container">
+    <div class="graph" bind:this={canvas}></div>
+</div>
 
 <style>
-    .graph {
-        width: 100vw;
+    .graph-container {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
         background-color: #222222;
-        height: 100vh;
+    }
+    .graph {
+        width: 90%;
+        height: 95%;
         border: 2px solid #000;
+        touch-action: manipulation;
     }
     .bio {
         font-weight: bold;

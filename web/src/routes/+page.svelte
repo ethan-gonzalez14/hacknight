@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { add_relationship, get_relationships }  from '$lib/query-server';
+    import { add_relationship }  from '$lib/query-server';
     import Graph from "$lib/Graph.svelte";
     import Modal from "$lib/Modal.svelte";
 	import Input from '$lib/Input.svelte';
@@ -13,14 +13,35 @@
     }
 
     let code = "";
+    let relationship = "";
     let error = $state("");
     let message = $state("");
     async function find() {
-        const add = await add_relationship(data.username, code);
+        let processed = relationship.toLowerCase();
+        switch (processed) {
+            case "friends":
+            case "family":
+            case "work":
+            case "married":
+            case "romantic":
+                break;
+            default:
+                error = "Please select a valid relationship type.";
+                return;
+        }
+        if (code == "") {
+            error = "Please enter a code.";
+            return;
+        }
+
+        const add = await add_relationship(data.username, code, processed);
         if (add.error) {
             switch (add.error) {
                 case "CODE_DOES_NOT_EXIST":
                     error = "The code you entered does not exist.";
+                    break;
+                case "ALREADY_CONNECTED":
+                    error = "You're already friends with this person! See if you can find them in the graph 😉.";
                     break;
             }
         }
@@ -59,6 +80,17 @@
         <SocialButton class="find" label="Find Your Friend" onClick={find} width="140px" height="60px"/>
     </div>
     <!-- <button class="find" onclick={find}>Find Your Friend</button> -->
+    <input placeholder="And your relationship here" list="relationship" name="relationship" bind:value={relationship} />
+    <datalist id="relationship">
+        <option value="Friends">Friends 😎</option>
+        <option value="Family">Family 🥰</option>
+        <option value="Romantic">Romantic 💋</option>
+        <option value="Married">Married 🤱</option>
+        <option value="Work">Profressional 💼</option>
+    </datalist>
+    <br/> <br/>
+
+    <button class="find" onclick={find}>Find Your Friend</button>
     {#if error}
     <p class="red">{error}</p>
     {/if}
@@ -69,9 +101,21 @@
 
 <Graph cachedPeople={[]} center={data.username} />
 
-<style>
+<style lang="scss">
+    .red {
+        color: red;
+    }
+
+    .modal {
+        width: 100%;
+        height: 100%;
+        input, button {
+            width: 100%;
+        }
+    }
+
     .add {
-        aspect-ratio: 1 / 1;;
+        aspect-ratio: 1 / 1;
     }
     .logout {
         padding: 10px 10px;

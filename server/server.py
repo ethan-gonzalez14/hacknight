@@ -28,18 +28,23 @@ class SimpleRequestHandler(BaseHTTPRequestHandler):
     def do_POST(self):
         parsed_path = urlparse(self.path)
         path = parsed_path.path
-        query_params = parse_qs(parsed_path.query)
-        print("POST PATH: " + path)
 
         body = self._read_body().decode('utf-8')
 
         if path == '/add-connection':
-            (name, code) = body.split(' ')
+            print(f"BODY: {body}")
+            (name, code, level) = body.split(' ')
 
-            print(name, code)
+            print(name, code, level)
 
             if not name or not code:
                 self.respond_json(400, {"error": "Missing name or friend parameter"})
+                return
+            if level.lower() not in ['friends', 'family', 'work', 'married', 'romantic']:
+                self.respond_json(400, {"error": "Invalid level"})
+                return
+            if name.lower() not in people:
+                self.respond_json(404, {"error": "Person not found"})
                 return
 
             name = name.strip()
@@ -53,8 +58,12 @@ class SimpleRequestHandler(BaseHTTPRequestHandler):
             if person == None:
                 self.respond_json(200, {"error": "CODE_DOES_NOT_EXIST"})
                 return
+            
+            if get_relationship(name.lower(), person.name.lower()) is not None:
+                self.respond_json(200, {"error": "ALREADY_CONNECTED"})
+                return
 
-            add_relationship(Relationship(name.lower(), person.name.lower(), 0, "Unknown", "Unknown", False))
+            add_relationship(Relationship(name.lower(), person.name.lower(), 0, "Unknown", "Unknown", level.lower()))
 
             self.respond_json(200, {"message": "200 OK"})
             return
@@ -88,6 +97,7 @@ class SimpleRequestHandler(BaseHTTPRequestHandler):
             name = query_params.get("name", [None])[0]
             if name.lower() in people:
                 person = people[name.lower()]
+                print(person.jsonify())
                 self.respond_json(200, person.jsonify())
                 return
             else:
