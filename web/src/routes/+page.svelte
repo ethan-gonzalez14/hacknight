@@ -2,4 +2,5 @@
     import Hello from "$lib/Hello.svelte";
 </script>
 
-<Hello />
+<Hello/>
+<Hello/>
